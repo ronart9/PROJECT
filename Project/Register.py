@@ -14,7 +14,7 @@ class Register(tkinter.Toplevel):
     def __init__(self, parent):
         super().__init__(parent)
         self.parent = parent
-        self.geometry('600x450')
+        self.geometry('700x600')
         self.resizable(width=False, height=False)
         self.title('add user/register')
         #self.img = Image.open('what.jpg')
@@ -26,27 +26,30 @@ class Register(tkinter.Toplevel):
 
         self.create_gui()
         self.btn_close= Button(self, text='Close', command=self.close)
-        self.btn_close.place(x= 100, y= 300)
+        self.btn_close.place(x= 100, y= 470)
 
     def create_gui(self):
-        # phase 1 button
-        self.lbl_email = Label(self, width=10, text="email :")
-        self.lbl_email.place(x=100, y=50)
-        self.email = Entry(self, width=20)
-        self.email.place(x=100, y=80)
+        self.configure(bg='#ffc892')  # -using color HEX
 
-        self.lbl_password = Label(self, width=10, text="password :")
-        self.lbl_password.place(x=100, y=110)
-        self.password = Entry(self, width=20)
-        self.password.place(x=100, y=140)
+        self.lbl_email = Label(self, width=10, text="email :", font =('Helvetica bold',15))
+        self.lbl_email.place(x=180, y=100)
+        self.email = Entry(self, font=30)
+        self.email.place(x=180, y=150)
 
-        self.lbl_firstname = Label(self, width=10, text="firstname :")
-        self.lbl_firstname.place(x=100, y=170)
-        self.firstname = Entry(self, width=20)
-        self.firstname.place(x=100, y=200)
+        self.lbl_password = Label(self, width=10, text="password :", font =('Helvetica bold',15))
+        self.lbl_password.place(x=180, y=200)
+        self.password = Entry(self, font=30)
+        self.password.place(x=180, y=250)
 
-        self.buttonPlus = Button(self, text="register", command=self.handle_add_user, width=20, background="green")
-        self.buttonPlus.place(x=100, y=250)
+        self.lbl_username = Label(self, width=10, text="username :", font =('Helvetica bold',15))
+        self.lbl_username.place(x=180, y=300)
+        self.username = Entry(self, font=30)
+        self.username.place(x=180, y=350)
+
+
+
+        self.buttonPlus = Button(self, text="register", command=self.handle_add_user, font=30, background="green")
+        self.buttonPlus.place(x=180, y=400)
 
     def handle_add_user(self):
         self.client_handler = threading.Thread(target=self.register_user, args=())
@@ -56,10 +59,10 @@ class Register(tkinter.Toplevel):
     def register_user(self):
 
         if len(self.email.get())==0:
-            messagebox.showerror("please write city name", "Error")
+            messagebox.showerror("please write email name", "Error")
             return
         print("register")
-        arr = ["register", self.email.get(), self.password.get(), self.firstname.get()]
+        arr = ["register", self.email.get(), self.password.get(), self.username.get()]
         str_insert = ",".join(arr)
         print(str_insert)
         self.parent.client_socket.send(str_insert.encode())

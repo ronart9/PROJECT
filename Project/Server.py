@@ -1,9 +1,8 @@
 import multiprocessing
 import socket
 import threading
-#from users import *
+from UserDB import *
 import hashlib
-from tkinter import ttk, messagebox
 
 cores = multiprocessing.cpu_count()
 print(cores)
@@ -14,7 +13,7 @@ class Server(object):
        self.port = port
        self.count = 0
        self.running=True
-       #self.userDb = User()
+       self.userDb = UserDB()
 
    def start(self):
        try:
@@ -53,7 +52,7 @@ class Server(object):
                    #insert,email,password,firstname
                    arr = server_data.split(",")
                    print(server_data)
-                   if arr!=None and arr[0]=="register" and len(arr)==4:
+                   if arr and arr[0]=="register" and len(arr)==4:
                        print("register user")
                        print(arr)
                        server_data=self.userDb.insert_user(arr[1], arr[2], arr[3])

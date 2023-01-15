@@ -12,11 +12,11 @@ class UserDB(object):
 
         conn = sqlite3.connect('test.db')
         print ("Opened database successfully")
-        str = "CREATE TABLE IF NOT EXISTS " + self.__tablename + "(" + self.__Id + " " + "INTEGER PRIMARY KEY AUTOINCREMENT ,"
+        str = "CREATE TABLE IF NOT EXISTS " + self.__tablename + "(" + self.__Id + " " + " INTEGER PRIMARY KEY AUTOINCREMENT ,"
         str += " " + self.__email + " TEXT    NOT NULL ,"
         str += " " + self.__password + " TEXT    NOT NULL, "
-        str += " " + self.__username + " TEXT    NOT NULL) "
-        str += " " + self.__countwins + "INTEGER    NOT NULL"
+        str += " " + self.__username + " TEXT    NOT NULL, "
+        str += " " + self.__countwins + " INTEGER    NOT NULL)"
         conn.execute(str)
         print("Table created successfully")
         conn.commit()
@@ -39,14 +39,15 @@ class UserDB(object):
             return arr_users
         except:
             return False
-    def insert_user(self, email,  password, firstname):
+    def insert_user(self, email, password, username):
         try:
             conn = sqlite3.connect('test.db')
-            salt = 'SltKey'
-            slt_pass = hashlib.md5(salt.encode('utf-8') + password.encode('utf-8')).hexdigest()
-            print(slt_pass)
-            str_insert = "INSERT INTO " + self.__tablename + " (" + self.__email + "," + self.__password + "," +\
-                         self.__firstname + ") VALUES (" + "'" + email + "'" + "," + "'" + slt_pass + "'" + "," + "'" + firstname + "');"
+            #salt = 'SltKey'
+            #slt_pass = hashlib.md5(salt.encode('utf-8') + password.encode('utf-8')).hexdigest()
+            #print(slt_pass)
+            str_insert = f"INSERT INTO {self.__tablename} ({self.__email}, {self.__password}," \
+                         f"{self.__username}, {self.__countwins}) VALUES ('{email}', '{password}'," \
+                         f" '{username}', '{0}')"
             print(str_insert)
             conn.execute(str_insert)
             print("1")
@@ -75,16 +76,16 @@ class UserDB(object):
         try:
             conn = sqlite3.connect('test.db')
             print("Opened database successfully")
-            salt= 'SltKey'
-            slt_password= hashlib.md5(salt.encode('utf-8')+ password.encode('utf-8')).hexdigest()
-            print(slt_password)
-            strsql = "SELECT * from " + self.__tablename + " where " + self.__email + "=" + "'" + str(email) + "'" + " and " + self.__password + "=" + "'" + str(slt_password) + "'"
+            #salt= 'SltKey'
+            #slt_password= hashlib.md5(salt.encode('utf-8')+ password.encode('utf-8')).hexdigest()
+            #print(slt_password)
+            strsql = "SELECT * from " + self.__tablename + " where " + self.__email + "=" + "'" + str(email) + "'" + " and " + self.__password + "=" + "'" + password + "'"
             print(strsql)
             cursor = conn.execute(strsql)
             print(cursor)
             row= cursor.fetchone()
             print(row)
-            user_data = str([row[1], row[2], row[3]])
+            user_data = str([row[1], row[2], row[3], row[4]])
             print("User data: " + str(user_data))
             conn.commit()
             conn.close()
@@ -122,14 +123,14 @@ class UserDB(object):
         return "table  name is ", self.__tablename
 
 
-#u=User()
-#u.insert_user("u@x.com", "oron", 'yaron')
+#u=UserDB()
+#u.insert_user("u@x.com", "oron", 'yaron', 69)
 #u.insert_user("v@y.com", "dvidi", 'davidi')
 #u.insert_user("t@a.com", "aba", 'origin')
 #u.select_all_users()
 #u.check_user_by_username("Asaf")
 #u.delete_username("Asaf")
 #u.check_user_by_username("Asaf")
-#user=u.return_user_by_email('ronhakim9@gmail.com', "1234")
+#user=u.return_user_by_email('tom@g', "123")
 #print(user[0])
 #print(user)

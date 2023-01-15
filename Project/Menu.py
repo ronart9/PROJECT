@@ -44,9 +44,10 @@ class Menu_Screen(tkinter.Tk):
         self.btn_login.place(x=100, y=350)
         self.btn_regiser = Button(self, text='Register', command=self.open_register, font=30, background="#ffd966")
         self.btn_regiser.place(x=100, y=420)
-        #self.plz = StringVar()
-        #self.lab_plz_login = Label(self, textvariable=self.plz, background="yellow")
-        #self.lab_plz_login.place(x=100, y=420)
+
+        self.plz = StringVar()
+        self.lab_plz_login = Label(self, textvariable=self.plz, background="yellow")
+        self.lab_plz_login.place(x=500, y=100)
 
         self.handle_thread_socket()
 
