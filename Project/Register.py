@@ -25,8 +25,7 @@ class Register(tkinter.Toplevel):
         #self.userdb= User()
 
         self.create_gui()
-        self.btn_close= Button(self, text='Close', command=self.close)
-        self.btn_close.place(x= 100, y= 470)
+
 
     def create_gui(self):
         self.configure(bg='#ffc892')  # -using color HEX
@@ -46,10 +45,14 @@ class Register(tkinter.Toplevel):
         self.username = Entry(self, font=30)
         self.username.place(x=180, y=350)
 
-
+        self.btn_close= Button(self, text='Close', command=self.close, font =('Helvetica bold',12), background= "#ea1111")
+        self.btn_close.place(x= 560, y= 50)
 
         self.buttonPlus = Button(self, text="register", command=self.handle_add_user, font=30, background="green")
         self.buttonPlus.place(x=180, y=400)
+        #----------------------------------------------------------------------------------------------
+        self.btn_clear = Button(self, text= 'Clear', command = self.clear_text ,font =('Helvetica bold',12), background= "#f86060")
+        self.btn_clear.place(x= 300, y= 403)
 
     def handle_add_user(self):
         self.client_handler = threading.Thread(target=self.register_user, args=())
@@ -78,3 +81,8 @@ class Register(tkinter.Toplevel):
     def close(self):
         self.parent.deiconify() #show parent
         self.destroy()# close and destroy this screen
+
+    def clear_text(self):
+        self.email.delete(0, END)
+        self.password.delete(0, END)
+        self.username.delete(0, END)
