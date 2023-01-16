@@ -9,6 +9,9 @@ from tkinter import ttk, messagebox
 from PIL import ImageTk, Image
 
 from tkinter import ttk
+import tkinter as tk
+#from tkfontawesome import icon_to_image
+
 #https://www.pythontutorial.net/tkinter/tkinter-toplevel/
 #toplevel = tk.Toplevel(window) #'toplevel' can be changed to anything,
 #it is just a variable to hold the top level, 'window'
@@ -32,21 +35,28 @@ class Menu_Screen(tkinter.Tk):
 
     def create_gui(self):
         self.configure(bg='#856ff8')  # -using color HEX
+        #----------------------------------------------------------------------------------------------
         self.lab_email= Label(self, text='Enter Email: ', font =('Helvetica bold',15))
         self.lab_email.place(x= 100, y= 120)
         self.ent_email= Entry(self, font= 30)
         self.ent_email.place(x= 100, y= 165)
+        #----------------------------------------------------------------------------------------------
         self.lab_password = Label(self, text='Enter Password: ', font =('Helvetica bold',15))
         self.lab_password.place(x=100, y=235)
         self.ent_password = Entry(self, show= "*", font= 30)
         self.ent_password.place(x=100, y=280)
+        #----------------------------------------------------------------------------------------------
         self.btn_login = Button(self, text='Login', command=self.log_in, font= 30, background="#b7f061")
         self.btn_login.place(x=100, y=350)
+        #----------------------------------------------------------------------------------------------
         self.btn_regiser = Button(self, text='Register', command=self.open_register, font=30, background="#ffd966")
         self.btn_regiser.place(x=100, y=420)
-
+        #----------------------------------------------------------------------------------------------
+        self.btn_clear = Button(self, text= 'Clear', command = self.clear_text ,font =('Helvetica bold',12), background= "#f86060")
+        self.btn_clear.place(x= 200, y= 355)
+        #----------------------------------------------------------------------------------------------
         self.plz = StringVar()
-        self.lab_plz_login = Label(self, textvariable=self.plz, background="yellow")
+        self.lab_plz_login = Label(self, textvariable=self.plz)
         self.lab_plz_login.place(x=500, y=100)
 
         self.handle_thread_socket()
@@ -101,6 +111,10 @@ class Menu_Screen(tkinter.Tk):
         window = Register(self)
         window.grab_set()
         self.withdraw()
+
+    def clear_text(self):
+        self.ent_email.delete(0, END)
+        self.ent_password.delete(0, END)
 
 if __name__ == "__main__":
     app = Menu_Screen()
