@@ -36,12 +36,12 @@ class Menu_Screen(tkinter.Tk):
     def create_gui(self):
         self.configure(bg='#856ff8')  # -using color HEX
         #----------------------------------------------------------------------------------------------
-        self.lab_email= Label(self, text='Enter Email: ', font =('Helvetica bold',15))
+        self.lab_email= Label(self, text='Enter Email: ', font =('Helvetica bold',15), bg= '#856ff8')
         self.lab_email.place(x= 100, y= 120)
         self.ent_email= Entry(self, font= 30)
         self.ent_email.place(x= 100, y= 165)
         #----------------------------------------------------------------------------------------------
-        self.lab_password = Label(self, text='Enter Password: ', font =('Helvetica bold',15))
+        self.lab_password = Label(self, text='Enter Password: ', font =('Helvetica bold',15), bg= '#856ff8')
         self.lab_password.place(x=100, y=235)
         self.ent_password = Entry(self, show= "*", font= 30)
         self.ent_password.place(x=100, y=280)
@@ -52,7 +52,9 @@ class Menu_Screen(tkinter.Tk):
         self.btn_regiser = Button(self, text='Register', command=self.open_register, font=30, background="#ffd966")
         self.btn_regiser.place(x=100, y=420)
         #----------------------------------------------------------------------------------------------
-        self.btn_clear = Button(self, text= 'Clear', command = self.clear_text ,font =('Helvetica bold',12), background= "#f86060")
+        self.garbage = ImageTk.PhotoImage(Image.open("C:/Users/User/Pictures/garbage.png"))
+        self.btn_clear = Button(self, text= 'Clear', command = self.clear_text ,font =('Helvetica bold',12), image= self.garbage) # background= "#f86060"
+        self.btn_clear = self.garbage.resize((450, 350))
         self.btn_clear.place(x= 200, y= 355)
         #----------------------------------------------------------------------------------------------
         self.plz = StringVar()
