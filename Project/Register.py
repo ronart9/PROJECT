@@ -30,17 +30,17 @@ class Register(tkinter.Toplevel):
     def create_gui(self):
         self.configure(bg='#ffc892')  # -using color HEX
 
-        self.lbl_email = Label(self, width=10, text="Email :", font =('Helvetica bold',15))
+        self.lbl_email = Label(self, width=10, text="Email :", font =('Helvetica bold',15), bg='#ffc892')
         self.lbl_email.place(x=180, y=100)
         self.email = Entry(self, font=30)
         self.email.place(x=180, y=150)
 
-        self.lbl_password = Label(self, width=10, text="Password :", font =('Helvetica bold',15))
+        self.lbl_password = Label(self, width=10, text="Password :", font =('Helvetica bold',15), bg='#ffc892')
         self.lbl_password.place(x=180, y=200)
         self.password = Entry(self, font=30)
         self.password.place(x=180, y=250)
 
-        self.lbl_username = Label(self, width=10, text="Username :", font =('Helvetica bold',15))
+        self.lbl_username = Label(self, width=10, text="Username :", font =('Helvetica bold',15), bg='#ffc892')
         self.lbl_username.place(x=180, y=300)
         self.username = Entry(self, font=30)
         self.username.place(x=180, y=350)
