@@ -52,14 +52,16 @@ class Menu_Screen(tkinter.Tk):
         self.btn_regiser = Button(self, text='Register', command=self.open_register, font=30, background="#ffd966")
         self.btn_regiser.place(x=100, y=420)
         #----------------------------------------------------------------------------------------------
-        self.garbage = ImageTk.PhotoImage(Image.open("C:/Users/User/Pictures/garbage.png"))
+        self.imggarbage = Image.open("C:/Users/User/Pictures/garbage.png")
+        self.resized = self.imggarbage.resize((35, 35), Image.LANCZOS)
+        self.garbage = ImageTk.PhotoImage(self.resized)
         self.btn_clear = Button(self, text= 'Clear', command = self.clear_text ,font =('Helvetica bold',12), image= self.garbage) # background= "#f86060"
-        self.btn_clear = self.garbage.resize((450, 350))
-        self.btn_clear.place(x= 200, y= 355)
+        self.btn_clear.place(x= 200, y= 350)
         #----------------------------------------------------------------------------------------------
         self.plz = StringVar()
         self.lab_plz_login = Label(self, textvariable=self.plz)
         self.lab_plz_login.place(x=500, y=100)
+        #----------------------------------------------------------------------------------------------
 
         self.handle_thread_socket()
 
@@ -107,6 +109,10 @@ class Menu_Screen(tkinter.Tk):
             return data
         except:
             return False
+
+    def log_out(self):
+        pass
+            
 
 
     def open_register(self):
