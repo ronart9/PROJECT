@@ -106,8 +106,11 @@ class Menu_Screen(tkinter.Tk):
             if d[0] == 'W':
                 self.plz.set(data)
                 print(data)
+                self.Jlobby = Button(self, text="Join Lobby", font=('Helvetica bold', 16), background="#0eb800")
+                self.Jlobby.place(x=800, y=260)
             elif d[0] == 'F':
                 self.plz.set(data)
+                self.Jlobby.place_forget()
                 messagebox.showerror("error message", "Error")
                 print(data)
             return data
