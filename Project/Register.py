@@ -25,31 +25,43 @@ class Register(tkinter.Toplevel):
         #self.userdb= User()
 
         self.create_gui()
-        self.btn_close= Button(self, text='Close', command=self.close)
-        self.btn_close.place(x= 100, y= 470)
+
 
     def create_gui(self):
         self.configure(bg='#ffc892')  # -using color HEX
-
-        self.lbl_email = Label(self, width=10, text="Email :", font =('Helvetica bold',15))
+        #----------------------------------------------------------------------------------------------
+        self.lbl_email = Label(self, width=10, text="Email :", font =('Helvetica bold',15), bg='#ffc892')
         self.lbl_email.place(x=180, y=100)
         self.email = Entry(self, font=30)
         self.email.place(x=180, y=150)
-
-        self.lbl_password = Label(self, width=10, text="Password :", font =('Helvetica bold',15))
+        #----------------------------------------------------------------------------------------------
+        self.lbl_password = Label(self, width=10, text="Password :", font =('Helvetica bold',15), bg='#ffc892')
         self.lbl_password.place(x=180, y=200)
         self.password = Entry(self, font=30)
         self.password.place(x=180, y=250)
-
-        self.lbl_username = Label(self, width=10, text="Username :", font =('Helvetica bold',15))
+        #----------------------------------------------------------------------------------------------
+        self.lbl_username = Label(self, width=10, text="Username :", font =('Helvetica bold',15), bg='#ffc892')
         self.lbl_username.place(x=180, y=300)
         self.username = Entry(self, font=30)
         self.username.place(x=180, y=350)
-
-
-
+        #----------------------------------------------------------------------------------------------
+        self.btn_close= Button(self, text='Close', command=self.close, font =('Helvetica bold',12), background= "#ea1111")
+        self.btn_close.place(x= 560, y= 50)
+        #----------------------------------------------------------------------------------------------
         self.buttonPlus = Button(self, text="register", command=self.handle_add_user, font=30, background="green")
         self.buttonPlus.place(x=180, y=400)
+        #----------------------------------------------------------------------------------------------
+        # img adress school - "C:/Users/User/Pictures/garbage.png"
+        # img adress home -  "C:/Users/Admin/Pictures/garbage.png"
+        self.img_adress = "C:/Users/Admin/Pictures/garbage.png"
+        self.imggarbage = Image.open(self.img_adress)
+        self.resized = self.imggarbage.resize((35, 35), Image.Resampling.LANCZOS)
+        self.garbage = ImageTk.PhotoImage(self.resized)
+        self.btn_clear = Button(self, text='Clear', command=self.clear_text, font=('Helvetica bold', 12), image=self.garbage)  # background= "#f86060"
+        self.btn_clear.place(x=300, y=400)
+        #----------------------------------------------------------------------------------------------
+
+
 
     def handle_add_user(self):
         self.client_handler = threading.Thread(target=self.register_user, args=())
@@ -78,3 +90,8 @@ class Register(tkinter.Toplevel):
     def close(self):
         self.parent.deiconify() #show parent
         self.destroy()# close and destroy this screen
+
+    def clear_text(self):
+        self.email.delete(0, END)
+        self.password.delete(0, END)
+        self.username.delete(0, END)
