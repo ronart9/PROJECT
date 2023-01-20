@@ -51,9 +51,7 @@ class Register(tkinter.Toplevel):
         self.buttonPlus = Button(self, text="register", command=self.handle_add_user, font=30, background="green")
         self.buttonPlus.place(x=180, y=400)
         #----------------------------------------------------------------------------------------------
-        # img adress school - "C:/Users/User/Pictures/garbage.png"
-        # img adress home -  "C:/Users/Admin/Pictures/garbage.png"
-        self.img_adress = "C:/Users/Admin/Pictures/garbage.png"
+        self.img_adress = "garbage.png"
         self.imggarbage = Image.open(self.img_adress)
         self.resized = self.imggarbage.resize((35, 35), Image.Resampling.LANCZOS)
         self.garbage = ImageTk.PhotoImage(self.resized)

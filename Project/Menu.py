@@ -54,9 +54,7 @@ class Menu_Screen(tkinter.Tk):
         self.btn_register = Button(self, text='Register', command=self.open_register, font=30, background="#ffd966")
         self.btn_register.place(x=100, y=420)
         # ----------------------------------------------------------------------------------------------
-        # img adress school - "C:/Users/User/Pictures/garbage.png"
-        # img adress home -  "C:/Users/Admin/Pictures/garbage.png"
-        self.img_adress ="C:/Users/Admin/Pictures/garbage.png"
+        self.img_adress ="garbage.png"
         self.imggarbage = Image.open(self.img_adress)
         self.resized = self.imggarbage.resize((35, 35), Image.Resampling.LANCZOS)
         self.garbage = ImageTk.PhotoImage(self.resized)
