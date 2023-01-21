@@ -112,7 +112,7 @@ class Menu_Screen(tkinter.Tk):
             print(d)
             if d[0] == 'W':
                 self.plz.set(data)
-                print(data)
+                #print(data)
                 self.Jlobby = Button(self, text="Join Lobby", font=('Helvetica bold', 20), background="#0eb800")
                 self.Jlobby.place(x=800, y=260)
             elif d[0] == 'F':

@@ -40,6 +40,9 @@ class Register(tkinter.Toplevel):
         self.password = Entry(self, font=30)
         self.password.place(x=180, y=250)
         #----------------------------------------------------------------------------------------------
+        self.lbl_username_note = Label(self, text="* Username has to be below 9 digits *", font=('Helvetica bold', 9), bg='#bcbcbc')
+        self.lbl_username_note.place(x=180, y=330)
+        #----------------------------------------------------------------------------------------------
         self.lbl_username = Label(self, text="Username :", font =('Helvetica bold',15), bg='#ffc892')
         self.lbl_username.place(x=180, y=300)
         self.username = Entry(self, font=30)
@@ -67,17 +70,22 @@ class Register(tkinter.Toplevel):
         self.client_handler.start()
 
     def register_user(self):
-
-        if len(self.email.get())==0:
-            messagebox.showerror("please write email name", "Error")
-            return
-        print("register")
-        arr = ["register", self.email.get(), self.password.get(), self.username.get()]
-        str_insert = ",".join(arr)
-        print(str_insert)
-        self.parent.client_socket.send(str_insert.encode())
-        data = self.parent.client_socket.recv(1024).decode()
-        print(data)
+        try:
+            if len(self.email.get())==0:
+                messagebox.showerror("please write email name", "Error")
+                return
+            print("register")
+            if len(self.username.get())<= 8:
+                arr = ["register", self.email.get(), self.password.get(), self.username.get()]
+                str_insert = ",".join(arr)
+                print(str_insert)
+                self.parent.client_socket.send(str_insert.encode())
+                data = self.parent.client_socket.recv(1024).decode()
+                print(data)
+            else:
+                print("username is incorrect")
+        except:
+            print("could not register")
 
     # old register user
     # def register_user(self):
