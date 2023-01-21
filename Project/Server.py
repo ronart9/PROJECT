@@ -67,11 +67,11 @@ class Server(object):
                        server_data= self.userDb.return_user_by_email(arr[1], arr[2])
                        print("Server data: ", server_data)
                        if server_data:
-                           messege= "Welcome "+ str(server_data)
+                           messege= "Welcome: [ "+ str(server_data)+ " ]"
                            client_socket.send(messege.encode())
                        elif not server_data:
                            #messagebox.showerror("error message", "Error")
-                           client_socket.send("Failed to Login".encode())
+                           client_socket.send("Failed to Login !".encode())
 
                    elif arr!=None and arr[0] == "get_all_users" and len(arr)==1:
                        print("get_all_users")

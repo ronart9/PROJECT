@@ -61,11 +61,19 @@ class Menu_Screen(tkinter.Tk):
         self.btn_clear = Button(self, text='Clear', command=self.clear_text, font=('Helvetica bold', 12),
                                 image=self.garbage)  # background= "#f86060"
         self.btn_clear.place(x=200, y=350)
+
+        # ----------------------------------------------------------------------------------------------
+        self.logo = "paint logo.png"
+        self.logoimg = Image.open(self.logo)
+        self.resizeble = self.logoimg.resize((500, 225), Image.Resampling.LANCZOS)
+        self.paint = ImageTk.PhotoImage(self.resizeble)
+        self.lbl_logopaint= Label(self, image = self.paint , bg='#856ff8')
+        self.lbl_logopaint.place(x= 650, y= 10)
         # ----------------------------------------------------------------------------------------------
         self.plz = StringVar()
-        self.lab_plz_login = Label(self, textvariable=self.plz)
-        self.lab_plz_login.place(x=500, y=100)
-        # ----------------------------------------------------------------------------------------------
+        self.plz.set("Please Login...")
+        self.lab_plz_login = Label(self, textvariable=self.plz, bg='#856ff8' ,font=('Helvetica bold', 16))
+        self.lab_plz_login.place(x=700, y=112)
 
         self.handle_thread_socket()
 
@@ -101,10 +109,11 @@ class Menu_Screen(tkinter.Tk):
             self.client_socket.send(insert.encode())
             data = self.client_socket.recv(1024).decode()
             d = str(data)
+            print(d)
             if d[0] == 'W':
                 self.plz.set(data)
                 print(data)
-                self.Jlobby = Button(self, text="Join Lobby", font=('Helvetica bold', 16), background="#0eb800")
+                self.Jlobby = Button(self, text="Join Lobby", font=('Helvetica bold', 20), background="#0eb800")
                 self.Jlobby.place(x=800, y=260)
             elif d[0] == 'F':
                 self.plz.set(data)
