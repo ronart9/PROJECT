@@ -53,6 +53,20 @@ class Menu_Screen(tkinter.Tk):
         self.ent_password = Entry(self, show="*", font=30)
         self.ent_password.place(x=100, y=280)
         # ----------------------------------------------------------------------------------------------
+        self.img3_adress = "img_1.png"
+        self.imgeye = Image.open(self.img3_adress)
+        self.resized3 = self.imgeye.resize((25, 25), Image.Resampling.LANCZOS)
+        self.eye = ImageTk.PhotoImage(self.resized3)
+        # ----------------------------------------------------------------------------------------------
+
+        self.img2_adress = "img.png"
+        self.imgeyeclose = Image.open(self.img2_adress)
+        self.resized2 = self.imgeyeclose.resize((25, 25), Image.Resampling.LANCZOS)
+        self.eyeclose = ImageTk.PhotoImage(self.resized2)
+        self.btn_eye_closed = Button(self, text='Clear', command=self.HideShowEye, font=('Helvetica bold', 12),
+                                image=self.eyeclose)  # background= "#f86060"
+        self.btn_eye_closed.place(x=330, y=280)
+        # ----------------------------------------------------------------------------------------------
         self.btn_login = Button(self, text='Login', command=self.log_in, font=30, background="#b7f061")
         self.btn_login.place(x=100, y=350)
         # ----------------------------------------------------------------------------------------------
@@ -155,6 +169,21 @@ class Menu_Screen(tkinter.Tk):
         self.btn_login.place(x= 100, y= 350)
         self.ent_email.config(state="normal")
         self.ent_password.config(state="normal")
+
+
+
+
+    def HideShowEye(self):
+        try:
+            if self.ent_password.cget("show")== '':
+                self.ent_password.config(show= '*')
+                self.btn_eye_closed.config(image=self.eye)
+            else:
+                self.ent_password.config(show= '')
+                self.btn_eye_closed.config(image=self.eyeclose)
+        except:
+            print("failed to Hide & Show eye")
+            return False
 
 
 if __name__ == "__main__":
