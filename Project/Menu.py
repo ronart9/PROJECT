@@ -39,9 +39,9 @@ class Menu_Screen(tkinter.Tk):
     def create_gui(self):
         self.configure(bg='#856ff8')  # -using color HEX
         # ----------------------------------------------------------------------------------------------
-        self.w = Canvas(self, width=350, height=500, bg= '#856ff8', highlightthickness= 0)
-        self.w.create_rectangle(10, 10, 320, 480, outline="#5b3cbd", width= 5 ,fill= "#5b3cbd")
-        self.w.place(x= 50, y= 50)
+        self.bg_Log = Canvas(self, width=350, height=500, bg= '#856ff8', highlightthickness= 0)
+        self.bg_Log.create_rectangle(10, 10, 320, 480, outline="#5b3cbd", width= 5 ,fill= "#5b3cbd")
+        self.bg_Log.place(x= 50, y= 50)
         # ----------------------------------------------------------------------------------------------
         self.lab_email = Label(self, text='Enter Email: ', font=('Helvetica bold', 15), bg='#5b3cbd')
         self.lab_email.place(x=100, y=120)
