@@ -40,7 +40,8 @@ class Register(tkinter.Toplevel):
         self.password = Entry(self, font=30)
         self.password.place(x=180, y=250)
         #----------------------------------------------------------------------------------------------
-        self.lbl_username_note = Label(self, text="* Username has to be below 9 digits *", font=('Helvetica bold', 9), bg='#bcbcbc')
+        self.lbl_username_note = Label(self, text="* Username has to be below 9 digits *",
+                                       font=('Helvetica bold', 9), bg='#ffc892' , fg = "#c22620")
         self.lbl_username_note.place(x=180, y=330)
         #----------------------------------------------------------------------------------------------
         self.lbl_username = Label(self, text="Username :", font =('Helvetica bold',15), bg='#ffc892')

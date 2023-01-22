@@ -7,6 +7,7 @@ import socket
 # from users import User
 from tkinter import ttk, messagebox
 from PIL import ImageTk, Image
+import time
 
 from tkinter import ttk
 import tkinter as tk
@@ -38,12 +39,16 @@ class Menu_Screen(tkinter.Tk):
     def create_gui(self):
         self.configure(bg='#856ff8')  # -using color HEX
         # ----------------------------------------------------------------------------------------------
-        self.lab_email = Label(self, text='Enter Email: ', font=('Helvetica bold', 15), bg='#856ff8')
+        self.w = Canvas(self, width=350, height=500, bg= '#856ff8', highlightthickness= 0)
+        self.w.create_rectangle(10, 10, 320, 480, outline="#5b3cbd", width= 5 ,fill= "#5b3cbd")
+        self.w.place(x= 50, y= 50)
+        # ----------------------------------------------------------------------------------------------
+        self.lab_email = Label(self, text='Enter Email: ', font=('Helvetica bold', 15), bg='#5b3cbd')
         self.lab_email.place(x=100, y=120)
         self.ent_email = Entry(self, font=30)
         self.ent_email.place(x=100, y=165)
         # ----------------------------------------------------------------------------------------------
-        self.lab_password = Label(self, text='Enter Password: ', font=('Helvetica bold', 15), bg='#856ff8')
+        self.lab_password = Label(self, text='Enter Password: ', font=('Helvetica bold', 15), bg='#5b3cbd')
         self.lab_password.place(x=100, y=235)
         self.ent_password = Entry(self, show="*", font=30)
         self.ent_password.place(x=100, y=280)
@@ -61,7 +66,6 @@ class Menu_Screen(tkinter.Tk):
         self.btn_clear = Button(self, text='Clear', command=self.clear_text, font=('Helvetica bold', 12),
                                 image=self.garbage)  # background= "#f86060"
         self.btn_clear.place(x=200, y=350)
-
         # ----------------------------------------------------------------------------------------------
         self.logo = "paint logo.png"
         self.logoimg = Image.open(self.logo)
@@ -74,6 +78,8 @@ class Menu_Screen(tkinter.Tk):
         self.plz.set("Please Login...")
         self.lab_plz_login = Label(self, textvariable=self.plz, bg='#856ff8' ,font=('Helvetica bold', 16))
         self.lab_plz_login.place(x=700, y=112)
+        # ----------------------------------------------------------------------------------------------
+
 
         self.handle_thread_socket()
 
@@ -115,6 +121,12 @@ class Menu_Screen(tkinter.Tk):
                 #print(data)
                 self.Jlobby = Button(self, text="Join Lobby", font=('Helvetica bold', 20), background="#0eb800")
                 self.Jlobby.place(x=800, y=260)
+                self.clear_text()
+                self.btn_login.place_forget()
+                self.btn_logout = Button(self, text= "Logout", command= self.Log_out ,font=30, background= "#c7594b")
+                self.btn_logout.place(x= 100, y= 350)
+                self.ent_email.config(state= "disabled")
+                self.ent_password.config(state="disabled")
             elif d[0] == 'F':
                 self.plz.set(data)
                 self.Jlobby.place_forget()
@@ -135,6 +147,14 @@ class Menu_Screen(tkinter.Tk):
     def clear_text(self):
         self.ent_email.delete(0, END)
         self.ent_password.delete(0, END)
+
+    def Log_out(self):
+        self.plz.set("Please Login...")
+        self.Jlobby.place_forget()
+        self.btn_logout.place_forget()
+        self.btn_login.place(x= 100, y= 350)
+        self.ent_email.config(state="normal")
+        self.ent_password.config(state="normal")
 
 
 if __name__ == "__main__":
