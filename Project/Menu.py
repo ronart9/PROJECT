@@ -28,13 +28,7 @@ class Menu_Screen(tkinter.Tk):
         self.geometry('1200x600')
         self.resizable(width=False, height=False)
         self.title('Main Window')
-        # self.img = Image.open('one piece.jpg')
-        # self.resize = self.img.resize((600, 450), Image.Resampling.LANCZOS)
-        # self.imgLabel = Label(self, image=self.bg)
-        # self.imgLabel.pack(expand=YES)
-        # place a button on the root window
-        # self.btn_register = Button(self, text='Register', command=self.open_register, background="green")
-        # self.btn_register.place(x=200, y=50)
+
         self.create_gui()
 
     def create_gui(self):
@@ -135,6 +129,7 @@ class Menu_Screen(tkinter.Tk):
             d = str(data)
             print(d)
             if d[0] == 'W':
+                print("OOOOOOOOOOOOOOOOOOOOO")
                 self.plz.set(data)
                 #print(data)
                 self.Jlobby = Button(self, text="Join Lobby", command = self.Open_Lobby,
@@ -151,7 +146,6 @@ class Menu_Screen(tkinter.Tk):
                 self.Jlobby.place_forget()
                 messagebox.showerror("error message", "Error")
                 print(data)
-            return data
         except:
             return False
 
@@ -191,7 +185,7 @@ class Menu_Screen(tkinter.Tk):
         window = Lobby(self)
         window.grab_set()
         self.withdraw()
-        self.Lobby_data()
+
 
 
 
@@ -211,7 +205,7 @@ class Menu_Screen(tkinter.Tk):
             print(d)
             return d
         except:
-            print("could not get datat Lobby")
+            print("could not get data Lobby")
             return False
 
 
