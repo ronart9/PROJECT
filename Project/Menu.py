@@ -44,9 +44,10 @@ class Menu_Screen(tkinter.Tk):
         self.bg_Log.create_rectangle(10, 10, 320, 480, outline="#5b3cbd", width= 5 ,fill= "#5b3cbd")
         self.bg_Log.place(x= 50, y= 50)
         # ----------------------------------------------------------------------------------------------
+        self.emailvar = StringVar()
         self.lab_email = Label(self, text='Enter Email: ', font=('Helvetica bold', 15), bg='#5b3cbd')
         self.lab_email.place(x=100, y=120)
-        self.ent_email = Entry(self, font=30)
+        self.ent_email = Entry(self, textvariable=self.emailvar, font=30)
         self.ent_email.place(x=100, y=165)
         # ----------------------------------------------------------------------------------------------
         self.lab_password = Label(self, text='Enter Password: ', font=('Helvetica bold', 15), bg='#5b3cbd')
@@ -96,6 +97,8 @@ class Menu_Screen(tkinter.Tk):
         # ----------------------------------------------------------------------------------------------
 
 
+
+
         self.handle_thread_socket()
 
     # def open_register(self):
@@ -137,7 +140,7 @@ class Menu_Screen(tkinter.Tk):
                 self.Jlobby = Button(self, text="Join Lobby", command = self.Open_Lobby,
                                      font=('Helvetica bold', 20), background="#0eb800")
                 self.Jlobby.place(x=800, y=260)
-                self.clear_text()
+                #self.clear_text()
                 self.btn_login.place_forget()
                 self.btn_logout = Button(self, text= "Logout", command= self.Log_out ,font=30, background= "#c7594b")
                 self.btn_logout.place(x= 100, y= 350)
@@ -168,6 +171,8 @@ class Menu_Screen(tkinter.Tk):
         self.btn_login.place(x= 100, y= 350)
         self.ent_email.config(state="normal")
         self.ent_password.config(state="normal")
+        self.clear_text()
+
 
     def HideShowEye(self):
         try:
@@ -179,12 +184,35 @@ class Menu_Screen(tkinter.Tk):
                 self.btn_eye_closed.config(image=self.eyeclose)
         except:
             print("failed to Hide & Show eye")
+
             return False
 
     def Open_Lobby(self):
         window = Lobby(self)
         window.grab_set()
         self.withdraw()
+        self.Lobby_data()
+
+
+
+    def Lobby_data(self):
+        try:
+            print("J Lobby test")
+            email = self.ent_email.get()
+            print(email)
+            password = self.ent_password.get()
+            print(password)
+            arr = ["JoinLobby", email, password]
+            insert = ",".join(arr)
+            print(insert)
+            self.client_socket.send(insert.encode())
+            data = self.client_socket.recv(1024).decode()
+            d = str(data)
+            print(d)
+            return d
+        except:
+            print("could not get datat Lobby")
+            return False
 
 
 if __name__ == "__main__":

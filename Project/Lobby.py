@@ -4,6 +4,8 @@ from tkinter import *
 from tkinter import ttk, messagebox
 #from users import  *
 from PIL import ImageTk, Image
+from UserDB import *
+
 
 #https://www.pythontutorial.net/tkinter/tkinter-toplevel/
 #toplevel = tk.Toplevel(window) #'toplevel' can be changed to anything,
@@ -16,13 +18,14 @@ class Lobby(tkinter.Toplevel):
         self.parent = parent
         self.geometry('500x300')
         self.resizable(width=False, height=False)
-        self.title('add user/register')
+        self.title('Waiting Lobby')
         #self.img = Image.open('what.jpg')
         #self.resize = self.img.resize((600, 450), Image.Resampling.LANCZOS)
         #self.bg = ImageTk.PhotoImage(self.resize)
         #self.imgLabel = Label(self, image=self.bg)
         #self.imgLabel.pack(expand=YES)
         #self.userdb= User()
+        self.userDb = UserDB()
 
         self.create_gui()
 
@@ -30,7 +33,7 @@ class Lobby(tkinter.Toplevel):
     def create_gui(self):
         self.configure(bg='#909090')  # -using color HEX
         # ----------------------------------------------------------------------------------------------
-        self.btn_close = Button(self, text='Close', command=self.close, font=('Helvetica bold', 12),
+        self.btn_close = Button(self, text='Leave', command=self.close, font=('Helvetica bold', 12),
                                 background="#ea1111")
         self.btn_close.place(x=420, y=20)
         # ----------------------------------------------------------------------------------------------
@@ -38,6 +41,18 @@ class Lobby(tkinter.Toplevel):
         self.Conn_Pl.set("Waiting for Player 2...")
         self.lab_plz_login = Label(self, textvariable=self.Conn_Pl, fg='#183652', bg = '#7190ab',font=('Helvetica bold', 16))
         self.lab_plz_login.place(x=150, y=260)
+        # ----------------------------------------------------------------------------------------------
+        self.logoLb = "LobbyFrameP1.png"
+        self.logoimgLb = Image.open(self.logoLb)
+        self.resizeble = self.logoimgLb.resize((220, 160), Image.Resampling.LANCZOS)
+        self.LobbyImg = ImageTk.PhotoImage(self.resizeble)
+        self.lbl_LobbyImg = Label(self, image=self.LobbyImg, bg='#909090')
+        self.lbl_LobbyImg.place(x=25, y=60)
+        # ----------------------------------------------------------------------------------------------
+        self.data= self.parent.Lobby_data()
+        self.lab_P1 = Label(self, text= self.data,
+                            font=('Helvetica bold', 15), bg='#747474')
+        self.lab_P1.place(x=60, y=120)
 
 
 
