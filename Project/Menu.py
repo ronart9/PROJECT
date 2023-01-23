@@ -7,6 +7,7 @@ import socket
 # from users import User
 from tkinter import ttk, messagebox
 from PIL import ImageTk, Image
+from Lobby import Lobby
 import time
 
 from tkinter import ttk
@@ -133,7 +134,8 @@ class Menu_Screen(tkinter.Tk):
             if d[0] == 'W':
                 self.plz.set(data)
                 #print(data)
-                self.Jlobby = Button(self, text="Join Lobby", font=('Helvetica bold', 20), background="#0eb800")
+                self.Jlobby = Button(self, text="Join Lobby", command = self.Open_Lobby,
+                                     font=('Helvetica bold', 20), background="#0eb800")
                 self.Jlobby.place(x=800, y=260)
                 self.clear_text()
                 self.btn_login.place_forget()
@@ -149,9 +151,6 @@ class Menu_Screen(tkinter.Tk):
             return data
         except:
             return False
-
-    def log_out(self):
-        pass
 
     def open_register(self):
         window = Register(self)
@@ -170,9 +169,6 @@ class Menu_Screen(tkinter.Tk):
         self.ent_email.config(state="normal")
         self.ent_password.config(state="normal")
 
-
-
-
     def HideShowEye(self):
         try:
             if self.ent_password.cget("show")== '':
@@ -184,6 +180,11 @@ class Menu_Screen(tkinter.Tk):
         except:
             print("failed to Hide & Show eye")
             return False
+
+    def Open_Lobby(self):
+        window = Lobby(self)
+        window.grab_set()
+        self.withdraw()
 
 
 if __name__ == "__main__":
