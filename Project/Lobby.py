@@ -54,9 +54,9 @@ class Lobby(tkinter.Toplevel):
                             font=('Helvetica bold', 15), bg='#747474')
         self.lab_P1.place(x=60, y=120)
         # ----------------------------------------------------------------------------------------------
-        self.Name_P2 = self.parent.client_socket.recv(1024).decode('utf-8')
-        self.lbl_NameP2 = Label(self, text= self.Name_P2, font=('Helvetica bold', 15), bg='#747474')
-        self.lbl_NameP2.place(x= 160, y = 120)
+        #self.Name_P2 = self.parent.client_socket.recv(1024).decode('utf-8')
+        #self.lbl_NameP2 = Label(self, text= self.Name_P2, font=('Helvetica bold', 15), bg='#747474')
+        #self.lbl_NameP2.place(x= 160, y = 120)
 
 
 

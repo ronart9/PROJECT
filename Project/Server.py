@@ -30,7 +30,7 @@ class Server(object):
                 self.count += 1
                 print(self.count)
                 # implement here your main logic
-                client_handler = threading.Thread(target=self.handle_client_connection, args=(clientSocket,))
+                client_handler = threading.Thread(target=self.handle_client_connection, args=(clientSocket,self.count))
                 client_handler.start()
 
         except socket.error as e:
@@ -40,10 +40,10 @@ class Server(object):
         #client_handler = threading.Thread(target=self.handle_client_connection, args=(clientSock, current,))
         #client_handler.start()
 
-    def handle_client_connection(self, client_socket):
+    def handle_client_connection(self, client_socket, current):
         not_crash = True
         print(not_crash)
-        while len(self.players)!= 2 and not_crash:
+        while not_crash:
             print("____________________")
             #try:
             server_data = client_socket.recv(1024).decode('utf-8')
@@ -73,21 +73,38 @@ class Server(object):
                     client_socket.send("Failed to Login !".encode())
 
             elif arr and arr[0] == "JoinLobby" and len(arr) == 3:
-                username = self.userDb.return_user_by_email(arr[1], arr[2])
-                print(arr)
-                print("Server data: ", username)
-                if username:
-                    messege = "Player 1:\n[ " + str(username) + " ]"
-                    client_socket.send(messege.encode())
-                elif not username:
-                    # messagebox.showerror("error message", "Error")
-                    client_socket.send("Failed to find a Player".encode())
-                player = [username, client_socket]
-                print("HUYYYYYYYY !!!")
-                self.players.append(player)
-                print(arr[0])
-                print(player)
-
+                while len(self.players) != 2:
+                    current = self.count
+                    if current == 1:
+                        username1 = self.userDb.return_user_by_email(arr[1], arr[2])
+                        print(arr)
+                        print("Server data: ", username1)
+                        if username1:
+                            messege = "Player " + str(current) +":" +"\n[ " + str(username1) + " ]"
+                            client_socket.send(messege.encode())
+                        elif not username1:
+                            # messagebox.showerror("error message", "Error")
+                            client_socket.send("Failed to find a Player".encode())
+                        player1 = [username1, client_socket , current]
+                        self.players.append(player1)
+                        print(arr[0])
+                        print(player1)
+                    if current == 2:
+                        username2 = self.userDb.return_user_by_email(arr[1], arr[2])
+                        print(arr)
+                        print("Server data: ", username2)
+                        if username2:
+                            messege = "Player " + str(current) + ":" + "\n[ " + str(username2) + " ]"
+                            client_socket.send(messege.encode())
+                        elif not username2:
+                            # messagebox.showerror("error message", "Error")
+                            client_socket.send("Failed to find a Player".encode())
+                        player2 = [username2, client_socket, current]
+                        self.players.append(player2)
+                        print(arr[0])
+                        print(player2)
+                    else:
+                        current = 0
 
             elif arr != None and arr[0] == "get_all_users" and len(arr) == 1:
                 print("get_all_users")
