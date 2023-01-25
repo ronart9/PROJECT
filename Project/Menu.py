@@ -189,24 +189,7 @@ class Menu_Screen(tkinter.Tk):
 
 
 
-    def Lobby_data(self):
-        try:
-            print("J Lobby test")
-            email = self.ent_email.get()
-            print(email)
-            password = self.ent_password.get()
-            print(password)
-            arr = ["JoinLobby", email, password]
-            insert = ",".join(arr)
-            print(insert)
-            self.client_socket.send(insert.encode())
-            data = self.client_socket.recv(1024).decode()
-            d = str(data)
-            print(d)
-            return d
-        except:
-            print("could not get data Lobby")
-            return False
+
 
 
 if __name__ == "__main__":

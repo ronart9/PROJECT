@@ -5,6 +5,9 @@ from tkinter import ttk, messagebox
 #from users import  *
 from PIL import ImageTk, Image
 from UserDB import *
+import tkinter as tk
+from Register import Register
+
 
 
 #https://www.pythontutorial.net/tkinter/tkinter-toplevel/
@@ -26,6 +29,7 @@ class Lobby(tkinter.Toplevel):
         #self.imgLabel.pack(expand=YES)
         #self.userdb= User()
         self.userDb = UserDB()
+        self.num_players = 0
 
         self.create_gui()
 
@@ -37,9 +41,9 @@ class Lobby(tkinter.Toplevel):
                                 background="#ea1111")
         self.btn_close.place(x=420, y=20)
         # ----------------------------------------------------------------------------------------------
-        self.Conn_Pl = StringVar()
-        self.Conn_Pl.set("Waiting for Player 2...")
-        self.lab_plz_login = Label(self, textvariable=self.Conn_Pl, fg='#183652', bg = '#7190ab',font=('Helvetica bold', 16))
+       # self.Conn_Pl = StringVar()
+        #self.Conn_Pl.set("Waiting for Player 2...")
+        self.lab_plz_login = Label(self, text="waiting for player 2...", fg='#183652', bg = '#7190ab',font=('Helvetica bold', 16))
         self.lab_plz_login.place(x=150, y=260)
         # ----------------------------------------------------------------------------------------------
         self.logoLb = "LobbyFrameP1.png"
@@ -49,17 +53,52 @@ class Lobby(tkinter.Toplevel):
         self.lbl_LobbyImg = Label(self, image=self.LobbyImg, bg='#909090')
         self.lbl_LobbyImg.place(x=25, y=60)
         # ----------------------------------------------------------------------------------------------
-        self.data= self.parent.Lobby_data()
-        self.lab_P1 = Label(self, text= self.data,
-                            font=('Helvetica bold', 15), bg='#747474')
-        self.lab_P1.place(x=60, y=120)
+        self.PCount_data= self.Lobby_data()
+        self.data = f"Player {self.PCount_data}\n[ {self.userDb.return_user_by_email(self.parent.ent_email.get(), self.parent.ent_password.get())} ]"
+        if self.PCount_data == 1:
+            self.lab_P1 = Label(self, text= self.data,
+                                font=('Helvetica bold', 15), bg='#747474')
+            self.lab_P1.place(x=60, y=120)
+        if self.PCount_data == 2:
+            self.lab_P1 = Label(self, text= self.data,
+                                font=('Helvetica bold', 15), bg='#747474')
+            self.lab_P1.place(x=160, y=120)
         # ----------------------------------------------------------------------------------------------
         #self.Name_P2 = self.parent.client_socket.recv(1024).decode('utf-8')
         #self.lbl_NameP2 = Label(self, text= self.Name_P2, font=('Helvetica bold', 15), bg='#747474')
         #self.lbl_NameP2.place(x= 160, y = 120)
 
 
+    def Lobby_data(self):
+        try:
+            print("J Lobby test")
+            email = self.parent.ent_email.get()
+            print(email)
+            password = self.parent.ent_password.get()
+            print(password)
+            arr = ["JoinLobby", email, password]
+            insert = ",".join(arr)
+            print(insert)
+            self.parent.client_socket.send(insert.encode())
+            data = self.parent.client_socket.recv(1024).decode()
+            d = str(data)
+            print(d)
+            return d
+        except:
+            print("could not get data Lobby")
+            return False
+    def on_player_connect(self):
+        self.num_players += 1
+        if self.num_players == 2:
+            self.lab_plz_login.config(text="Both players are connected!")
+            self.lab_plz_login.config(state=tk.NORMAL)
+        else:
+            self.lab_plz_login.config(text="Waiting for player {} to")
 
+    #player1 = [username1, client_socket, current]
+    #self.players.append(player1)
+    #print(arr[0])
+    #print(player1)
 
     def SLobby(self):
         pass
