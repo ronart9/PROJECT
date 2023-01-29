@@ -1,13 +1,11 @@
 import threading
+import time
 import tkinter
 from tkinter import *
 from tkinter import ttk, messagebox
 #from users import  *
 from PIL import ImageTk, Image
 from UserDB import *
-import tkinter as tk
-from Register import Register
-
 
 
 #https://www.pythontutorial.net/tkinter/tkinter-toplevel/
@@ -22,16 +20,12 @@ class Lobby(tkinter.Toplevel):
         self.geometry('500x300')
         self.resizable(width=False, height=False)
         self.title('Waiting Lobby')
-        #self.img = Image.open('what.jpg')
-        #self.resize = self.img.resize((600, 450), Image.Resampling.LANCZOS)
-        #self.bg = ImageTk.PhotoImage(self.resize)
-        #self.imgLabel = Label(self, image=self.bg)
-        #self.imgLabel.pack(expand=YES)
-        #self.userdb= User()
         self.userDb = UserDB()
-        self.num_players = 0
 
         self.create_gui()
+
+        self.waiting_list = ["me"]
+
 
 
     def create_gui(self):
@@ -41,10 +35,10 @@ class Lobby(tkinter.Toplevel):
                                 background="#ea1111")
         self.btn_close.place(x=420, y=20)
         # ----------------------------------------------------------------------------------------------
-       # self.Conn_Pl = StringVar()
-        #self.Conn_Pl.set("Waiting for Player 2...")
-        self.lab_plz_login = Label(self, text="waiting for player 2...", fg='#183652', bg = '#7190ab',font=('Helvetica bold', 16))
-        self.lab_plz_login.place(x=150, y=260)
+        self.Conn_Pl = StringVar()
+        self.Conn_Pl.set("Waiting for Player 2..." )
+        self.lab_wtg = Label(self, textvariable=self.Conn_Pl, fg='#1ef800', bg = '#909090',font=('Helvetica bold', 16))
+        self.lab_wtg.place(x=35, y=240)
         # ----------------------------------------------------------------------------------------------
         self.logoLb = "LobbyFrameP1.png"
         self.logoimgLb = Image.open(self.logoLb)
@@ -53,55 +47,91 @@ class Lobby(tkinter.Toplevel):
         self.lbl_LobbyImg = Label(self, image=self.LobbyImg, bg='#909090')
         self.lbl_LobbyImg.place(x=25, y=60)
         # ----------------------------------------------------------------------------------------------
-        self.PCount_data= self.Lobby_data()
-        self.data = f"Player {self.PCount_data}\n[ {self.userDb.return_user_by_email(self.parent.ent_email.get(), self.parent.ent_password.get())} ]"
-        if self.PCount_data == 1:
-            self.lab_P1 = Label(self, text= self.data,
-                                font=('Helvetica bold', 15), bg='#747474')
-            self.lab_P1.place(x=60, y=120)
-        if self.PCount_data == 2:
-            self.lab_P1 = Label(self, text= self.data,
-                                font=('Helvetica bold', 15), bg='#747474')
-            self.lab_P1.place(x=160, y=120)
-        # ----------------------------------------------------------------------------------------------
-        #self.Name_P2 = self.parent.client_socket.recv(1024).decode('utf-8')
-        #self.lbl_NameP2 = Label(self, text= self.Name_P2, font=('Helvetica bold', 15), bg='#747474')
-        #self.lbl_NameP2.place(x= 160, y = 120)
+        self.list = Listbox(self , height = 6)
+        self.list.insert(1, "Me")
+        self.list.place(x= 65, y= 92)
+
+        self.handle_waiting_for_player()
 
 
-    def Lobby_data(self):
-        try:
-            print("J Lobby test")
-            email = self.parent.ent_email.get()
-            print(email)
-            password = self.parent.ent_password.get()
-            print(password)
-            arr = ["JoinLobby", email, password]
-            insert = ",".join(arr)
-            print(insert)
-            self.parent.client_socket.send(insert.encode())
-            data = self.parent.client_socket.recv(1024).decode()
-            d = str(data)
-            print(d)
-            return d
-        except:
-            print("could not get data Lobby")
-            return False
-    def on_player_connect(self):
-        self.num_players += 1
-        if self.num_players == 2:
-            self.lab_plz_login.config(text="Both players are connected!")
-            self.lab_plz_login.config(state=tk.NORMAL)
-        else:
-            self.lab_plz_login.config(text="Waiting for player {} to")
-
-    #player1 = [username1, client_socket, current]
-    #self.players.append(player1)
-    #print(arr[0])
-    #print(player1)
 
     def SLobby(self):
         pass
+
+
+    def handle_waiting_for_player(self):
+        self.Client_handler = threading.Thread(target=self.waiting_for_player, args=())
+        self.Client_handler.daemon = True
+        self.Client_handler.start()
+
+    def waiting_for_player(self):
+        email = self.parent.ent_email.get()
+        password = self.parent.ent_password.get()
+        username = self.userDb.return_user_by_email(email, password)
+        arr = ["JoinLobby", username]
+        data = ",".join(arr)
+        self.parent.client_socket.send(data.encode())
+        data = self.parent.client_socket.recv(1024).decode()
+        arr = data.split(",")
+        print(arr)
+        if(arr[1] == "wait"):
+            data = self.parent.client_socket.recv(1024).decode()
+            data = data.split(",")
+            self.list.insert(2, data[0])
+            self.Animation_Ent_Lobby()
+            # add stopper
+            # -----------------------
+
+            # -----------------------
+            self.SLobby()
+        elif(arr[1] == "start"):
+            print(arr[0], " join us ")
+            self.list.insert(2, arr[0])
+            self.Animation_Ent_Lobby()
+            # add stopper
+            # -----------------------
+
+            # -----------------------
+            self.SLobby()
+
+    def Animation_Ent_Lobby(self):
+        self.Conn_Pl.set("Pleyer 2 connected")
+        time.sleep(1)
+        self.Conn_Pl.set("Pleyer 2 connected .")
+        time.sleep(1)
+        self.Conn_Pl.set("Pleyer 2 connected ..")
+        time.sleep(1)
+        self.Conn_Pl.set("Pleyer 2 connected ...")
+        time.sleep(1)
+        self.Conn_Pl.set("")
+        time.sleep(0.3)
+        self.Conn_Pl.set("S")
+        time.sleep(0.3)
+        self.Conn_Pl.set("sT")
+        time.sleep(0.3)
+        self.Conn_Pl.set("stA")
+        time.sleep(0.3)
+        self.Conn_Pl.set("staR")
+        time.sleep(0.3)
+        self.Conn_Pl.set("starT")
+        time.sleep(0.3)
+        self.Conn_Pl.set("startinG")
+        time.sleep(0.3)
+        self.Conn_Pl.set("starting G")
+        time.sleep(0.3)
+        self.Conn_Pl.set("starting gA")
+        time.sleep(0.3)
+        self.Conn_Pl.set("starting gaM")
+        time.sleep(0.3)
+        self.Conn_Pl.set("starting gamE")
+        time.sleep(0.3)
+        self.Conn_Pl.set("starting game I")
+        time.sleep(0.3)
+        self.Conn_Pl.set("starting game iN")
+        time.sleep(0.3)
+        self.Conn_Pl.set("starting game in -")
+        time.sleep(0.3)
+        self.Conn_Pl.set("starting game in ->")
 
     def close(self):
         self.parent.deiconify() #show parent

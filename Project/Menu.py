@@ -129,7 +129,6 @@ class Menu_Screen(tkinter.Tk):
             d = str(data)
             print(d)
             if d[0] == 'W':
-                print("OOOOOOOOOOOOOOOOOOOOO")
                 self.plz.set(data)
                 #print(data)
                 self.Jlobby = Button(self, text="Join Lobby", command = self.Open_Lobby,

@@ -3,6 +3,7 @@ import socket
 import threading
 from UserDB import *
 import hashlib
+from Player import *
 
 class Server(object):
     def __init__(self, ip, port):
@@ -27,12 +28,10 @@ class Server(object):
                 clientSocket, client_addresses = self.sock.accept()
                 print('new client entered')
                 clientSocket.send('Hello this is server'.encode())
-                if self.count == 3:
-                    self.count =1
                 self.count += 1
                 print(self.count)
                 # implement here your main logic
-                client_handler = threading.Thread(target=self.handle_client_connection, args=(clientSocket,self.count))
+                client_handler = threading.Thread(target=self.handle_client_connection, args=(clientSocket,))
                 client_handler.start()
 
         except socket.error as e:
@@ -42,76 +41,73 @@ class Server(object):
         #client_handler = threading.Thread(target=self.handle_client_connection, args=(clientSock, current,))
         #client_handler.start()
 
-    def handle_client_connection(self, client_socket, current):
+    def handle_client_connection(self, client_socket):
         not_crash = True
-        current= self.count
         print(not_crash)
         while not_crash:
             print("____________________")
-            #try:
-            server_data = client_socket.recv(1024).decode('utf-8')
-            if server_data == "":
+            try:
+                server_data = client_socket.recv(1024).decode()
+                if server_data == "":
+                    break
+                # insert,email,password,firstname
+                arr = server_data.split(",")
+                print(server_data)
+                if arr and arr[0] == "register" and len(arr) == 4:
+                    print("register user")
+                    print(arr)
+                    IsExist = self.userDb.insert_user(arr[1], arr[2], arr[3])
+                    print("server data:", IsExist)
+                    if IsExist:
+                        client_socket.send("success register".encode())
+                    elif IsExist:
+                        client_socket.send("failed register".encode())
+                elif arr and arr[0] == "login" and len(arr) == 3:
+                    print(arr)
+                    username = self.userDb.return_user_by_email(arr[1], arr[2])
+                    print("Server data: ", username)
+                    if username:
+                        messege = "Welcome: [ " + str(username) + " ]"
+                        client_socket.send(messege.encode())
+                    elif not username:
+                        # messagebox.showerror("error message", "Error")
+                        client_socket.send("Failed to Login !".encode())
+
+                elif arr and arr[0] == "JoinLobby" and len(arr) == 2:
+                    print("Lobby...")
+                    self.Create_Lobby(client_socket, arr)
+
+
+                elif arr != None and arr[0] == "get_all_users" and len(arr) == 1:
+                    print("get_all_users")
+                    server_data = self.userDb.select_all_users()
+                    server_data = ",".join(server_data)  # convert data to string
+                else:
+                    server_data = "Failed"
+                    client_socket.send(server_data.encode())
+            except:
+                print("error")
+                not_crash = False
                 break
-            # insert,email,password,firstname
-            arr = server_data.split(",")
-            print(server_data)
-            if arr and arr[0] == "register" and len(arr) == 4:
-                print("register user")
-                print(arr)
-                IsExist = self.userDb.insert_user(arr[1], arr[2], arr[3])
-                print("server data:", IsExist)
-                if IsExist:
-                    client_socket.send("success register".encode())
-                elif IsExist:
-                    client_socket.send("failed register".encode())
 
-            elif arr and arr[0] == "login" and len(arr) == 3:
-                print(arr)
-                username = self.userDb.return_user_by_email(arr[1], arr[2])
-                print("Server data: ", username)
-                if username:
-                    messege = "Welcome: [ " + str(username) + " ]"
-                    client_socket.send(messege.encode())
-                elif not username:
-                    # messagebox.showerror("error message", "Error")
-                    client_socket.send("Failed to Login !".encode())
-
-            elif arr and arr[0] == "JoinLobby" and len(arr) == 3:
-                username1 = self.userDb.return_user_by_email(arr[1], arr[2])
-                print(arr)
-                print("Server data: ", username1)
-                if username1:
-                    messege = str(current)
-                    print(messege)
-                    client_socket.send(messege.encode())
-                elif not username1:
-                    # messagebox.showerror("error message", "Error")
-                    client_socket.send("Failed to find a Player".encode())
-
-
-            elif arr != None and arr[0] == "get_all_users" and len(arr) == 1:
-                print("get_all_users")
-                server_data = self.userDb.select_all_users()
-                server_data = ",".join(server_data)  # convert data to string
-            else:
-                server_data = "Failed"
-                client_socket.send(server_data.encode())
-            #except:
-                #print("error")
-                #not_crash = False
-                #break
-        self.Create_Lobby()
-
-    def Create_Lobby(self):
-        print(self.players)
-        player1 = self.players[0]
-        print(f"{player1} complete1")
-        player2 = self.players[1]
-        print(f"{player2} complete2")
-        message = "Player 1:\n[ " + str(player1[0]) + " ]"
-        message2 = "Player 2:\n[ " + str(player2[0]) + " ]"
-        #player2[1].send(message.encode())
-        #player1[1].send(message2.encode())
+    def Create_Lobby(self, client_socket, arr):
+        player = Player(client_socket, arr[1])
+        self.players.append(player)
+        if(len(self.players) == 1):
+            data = ["player1", "wait"]
+            join_data = ",".join(data)
+            client_socket.send(join_data.encode())
+        elif(len(self.players) == 2):
+            player1 = self.players[0]
+            player2 = self.players[1]
+            socket1 = player1.client_socket
+            socket2 = player2.client_socket
+            data1 = ["player1", "start"]
+            data2 = ["player2", "start"]
+            str_data1 = ",".join(data1)
+            str_data2 = ",".join(data2)
+            socket1.send(str_data2.encode())
+            socket2.send(str_data1.encode())
 
 
 
