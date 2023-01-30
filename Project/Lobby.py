@@ -31,7 +31,7 @@ class Lobby(tkinter.Toplevel):
     def create_gui(self):
         self.configure(bg='#909090')  # -using color HEX
         # ----------------------------------------------------------------------------------------------
-        self.btn_close = Button(self, text='Leave', command=self.close, font=('Helvetica bold', 12),
+        self.btn_close = Button(self, text=' X ', command=self.close, font=('Helvetica bold', 12),
                                 background="#ea1111")
         self.btn_close.place(x=420, y=20)
         # ----------------------------------------------------------------------------------------------
@@ -46,6 +46,21 @@ class Lobby(tkinter.Toplevel):
         self.LobbyImg = ImageTk.PhotoImage(self.resizeble)
         self.lbl_LobbyImg = Label(self, image=self.LobbyImg, bg='#909090')
         self.lbl_LobbyImg.place(x=25, y=60)
+        # ----------------------------------------------------------------------------------------------
+        self.logoTi = "TimerSetLogo.png"
+        self.logoimgTi = Image.open(self.logoTi)
+        self.resizebleTi = self.logoimgTi.resize((220, 160), Image.Resampling.LANCZOS)
+        self.LobbyImgTi = ImageTk.PhotoImage(self.resizebleTi)
+        self.lbl_LobbyImg = Label(self, image=self.LobbyImgTi, bg='#909090')
+        self.lbl_LobbyImg.place(x=260, y=70)
+        # ----------------------------------------------------------------------------------------------
+        self.Timer = StringVar()
+        self.Timer.set("")
+        self.lab_timer = Label(self, textvariable=self.Timer, fg='#ffffff', bg='#141850', font=('Helvetica bold', 16))
+        self.lab_timer.place(x=353, y=142)
+        # ----------------------------------------------------------------------------------------------
+        self.lbl_LobbyTXT = Label(self, text = "Lobby:", bg='#909090' , fg = "#0a14a2", font=('Helvetica bold', 16))
+        self.lbl_LobbyTXT.place(x=90, y=35)
         # ----------------------------------------------------------------------------------------------
         self.list = Listbox(self , height = 6)
         email = self.parent.ent_email.get()
@@ -82,19 +97,11 @@ class Lobby(tkinter.Toplevel):
             data = data.split(",")
             self.list.insert(2, data[0])
             self.Animation_Ent_Lobby()
-            # add stopper
-            # -----------------------
-
-            # -----------------------
             self.SLobby()
         elif(arr[1] == "start"):
             print(arr[0], " join us ")
             self.list.insert(2, arr[0])
             self.Animation_Ent_Lobby()
-            # add stopper
-            # -----------------------
-
-            # -----------------------
             self.SLobby()
 
     def Animation_Ent_Lobby(self):
@@ -135,6 +142,20 @@ class Lobby(tkinter.Toplevel):
         self.Conn_Pl.set("starting game in -")
         time.sleep(0.3)
         self.Conn_Pl.set("starting game in ->")
+        time.sleep(1)
+        self.Timer.set("5")
+        time.sleep(1)
+        self.Timer.set("4")
+        time.sleep(1)
+        self.Timer.set("3")
+        time.sleep(1)
+        self.Timer.set("2")
+        time.sleep(1)
+        self.Timer.set("1")
+        time.sleep(1)
+        self.Timer.set("")
+        time.sleep(2)
+        # def - starting game
 
     def close(self):
         self.parent.deiconify() #show parent
