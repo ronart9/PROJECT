@@ -48,7 +48,10 @@ class Lobby(tkinter.Toplevel):
         self.lbl_LobbyImg.place(x=25, y=60)
         # ----------------------------------------------------------------------------------------------
         self.list = Listbox(self , height = 6)
-        self.list.insert(1, "Me")
+        email = self.parent.ent_email.get()
+        password = self.parent.ent_password.get()
+        username = self.userDb.return_user_by_email(email, password)
+        self.list.insert(1, username)
         self.list.place(x= 65, y= 92)
 
         self.handle_waiting_for_player()
