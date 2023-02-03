@@ -67,6 +67,7 @@ class Server(object):
                     username = self.userDb.return_user_by_email(arr[1], arr[2])
                     print("Server data: ", username)
                     if username:
+                        client_socket.send(username.encode())
                         messege = "Welcome: [ " + str(username) + " ]"
                         client_socket.send(messege.encode())
                     elif not username:
@@ -76,6 +77,10 @@ class Server(object):
                 elif arr and arr[0] == "JoinLobby" and len(arr) == 2:
                     print("Lobby...")
                     self.Create_Lobby(client_socket, arr)
+
+                elif arr and arr[0] == "LeaveLobby" and len(arr) == 2:
+                    self.leaveLobby(client_socket, arr)
+
 
 
                 elif arr != None and arr[0] == "get_all_users" and len(arr) == 1:
@@ -94,7 +99,7 @@ class Server(object):
         player = Player(client_socket, arr[1])
         self.players.append(player)
         if(len(self.players) == 1):
-            data = ["player1", "wait"]
+            data = [arr[1], "wait"]
             join_data = ",".join(data)
             client_socket.send(join_data.encode())
         elif(len(self.players) == 2):
@@ -108,6 +113,16 @@ class Server(object):
             str_data2 = ",".join(data2)
             socket1.send(str_data2.encode())
             socket2.send(str_data1.encode())
+
+    def leaveLobby(self, client_socket, arr):
+        print(arr[1])
+        if(arr[1] == self.players[0].name):
+            self.players.remove(self.players[0])
+            self.players[1].send("playerleave".encode())
+        elif (arr[1] == self.players[1].name):
+            self.players.remove(self.players[1])
+            self.players[0].send("playerleave".encode())
+
 
 
 

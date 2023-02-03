@@ -28,6 +28,7 @@ class Menu_Screen(tkinter.Tk):
         self.geometry('1200x600')
         self.resizable(width=False, height=False)
         self.title('Main Window')
+        self.username = ""
 
         self.create_gui()
 
@@ -125,6 +126,7 @@ class Menu_Screen(tkinter.Tk):
             insert = ",".join(arr)
             print(insert)
             self.client_socket.send(insert.encode())
+            self.username = self.client_socket.recv(1024).decode()
             data = self.client_socket.recv(1024).decode()
             d = str(data)
             print(d)

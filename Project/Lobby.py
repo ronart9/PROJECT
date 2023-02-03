@@ -6,6 +6,7 @@ from tkinter import ttk, messagebox
 #from users import  *
 from PIL import ImageTk, Image
 from UserDB import *
+from Game import Game
 
 
 #https://www.pythontutorial.net/tkinter/tkinter-toplevel/
@@ -31,7 +32,7 @@ class Lobby(tkinter.Toplevel):
     def create_gui(self):
         self.configure(bg='#909090')  # -using color HEX
         # ----------------------------------------------------------------------------------------------
-        self.btn_close = Button(self, text=' X ', command=self.close, font=('Helvetica bold', 12),
+        self.btn_close = Button(self, text='Leave', command=self.close, font=('Helvetica bold', 12),
                                 background="#ea1111")
         self.btn_close.place(x=420, y=20)
         # ----------------------------------------------------------------------------------------------
@@ -73,8 +74,10 @@ class Lobby(tkinter.Toplevel):
 
 
 
-    def SLobby(self):
-        pass
+    def SGame(self):
+        window = Game(self)
+        window.grab_set()
+        self.withdraw()
 
 
     def handle_waiting_for_player(self):
@@ -82,10 +85,15 @@ class Lobby(tkinter.Toplevel):
         self.Client_handler.daemon = True
         self.Client_handler.start()
 
+    def handle_waiting_for_message(self):
+        self.Client_handler = threading.Thread(target=self.waiting_for__message, args=())
+        self.Client_handler.daemon = True
+        self.Client_handler.start()
+
     def waiting_for_player(self):
-        email = self.parent.ent_email.get()
-        password = self.parent.ent_password.get()
-        username = self.userDb.return_user_by_email(email, password)
+        #email = self.parent.ent_email.get()
+        #password = self.parent.ent_password.get()
+        username = self.parent.username
         arr = ["JoinLobby", username]
         data = ",".join(arr)
         self.parent.client_socket.send(data.encode())
@@ -97,12 +105,18 @@ class Lobby(tkinter.Toplevel):
             data = data.split(",")
             self.list.insert(2, data[0])
             self.Animation_Ent_Lobby()
-            self.SLobby()
         elif(arr[1] == "start"):
             print(arr[0], " join us ")
             self.list.insert(2, arr[0])
             self.Animation_Ent_Lobby()
-            self.SLobby()
+
+    def waiting_for__message(self):
+        data = self.parent.client_socket.recv(1024).decode()
+        if data == "playerleave":
+            pass
+
+
+
 
     def Animation_Ent_Lobby(self):
         self.Conn_Pl.set("Pleyer 2 connected")
@@ -154,9 +168,14 @@ class Lobby(tkinter.Toplevel):
         self.Timer.set("1")
         time.sleep(1)
         self.Timer.set("")
-        time.sleep(2)
-        # def - starting game
+        time.sleep(1)
+        self.SGame()
 
     def close(self):
+        #self.list.delete(0, END)
+        #message = ["LeaveLobby", self.parent.username]
+        #data = ",".join(message)
+        #self.parent.client_socket.send(data.encode())
+        #message = self.parent.client_socket.recv(1024).decode()
         self.parent.deiconify() #show parent
         self.destroy()# close and destroy this screen
