@@ -60,8 +60,12 @@ class Lobby(tkinter.Toplevel):
         self.lab_timer = Label(self, textvariable=self.Timer, fg='#ffffff', bg='#141850', font=('Helvetica bold', 16))
         self.lab_timer.place(x=353, y=142)
         # ----------------------------------------------------------------------------------------------
-        self.lbl_LobbyTXT = Label(self, text = "Lobby:", bg='#909090' , fg = "#0a14a2", font=('Helvetica bold', 16))
-        self.lbl_LobbyTXT.place(x=90, y=35)
+        self.logo = "img_2.png"
+        self.logoimg = Image.open(self.logo)
+        self.resizeble = self.logoimg.resize((100, 25), Image.Resampling.LANCZOS)
+        self.paint = ImageTk.PhotoImage(self.resizeble)
+        self.lbl_LobbyTXT = Label(self, bg='#909090' , image=self.paint)
+        self.lbl_LobbyTXT.place(x=80, y=35)
         # ----------------------------------------------------------------------------------------------
         self.list = Listbox(self , height = 6)
         email = self.parent.ent_email.get()

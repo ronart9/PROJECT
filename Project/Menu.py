@@ -85,6 +85,13 @@ class Menu_Screen(tkinter.Tk):
         self.lbl_logopaint= Label(self, image = self.paint , bg='#856ff8')
         self.lbl_logopaint.place(x= 650, y= 10)
         # ----------------------------------------------------------------------------------------------
+        self.logoLogin = "img_3.png"
+        self.logoLoginimg = Image.open(self.logoLogin)
+        self.resizebleLogin = self.logoLoginimg.resize((170, 30), Image.Resampling.LANCZOS)
+        self.paintLogin = ImageTk.PhotoImage(self.resizebleLogin)
+        self.lbl_logoLogin = Label(self, image=self.paintLogin, bg='#856ff8')
+        self.lbl_logoLogin.place(x=120, y=20)
+        # ----------------------------------------------------------------------------------------------
         self.plz = StringVar()
         self.plz.set("Please Login...")
         self.lab_plz_login = Label(self, textvariable=self.plz, bg='#856ff8' ,font=('Helvetica bold', 16))
@@ -133,9 +140,12 @@ class Menu_Screen(tkinter.Tk):
             if d[0] == 'W':
                 self.plz.set(data)
                 #print(data)
-                self.Jlobby = Button(self, text="Join Lobby", command = self.Open_Lobby,
-                                     font=('Helvetica bold', 20), background="#0eb800")
-                self.Jlobby.place(x=800, y=260)
+                self.logoJoin = "img_4.png"
+                self.logoJoinimg = Image.open(self.logoJoin)
+                self.resizebleJoin = self.logoJoinimg.resize((300, 100), Image.Resampling.LANCZOS)
+                self.paintJoin = ImageTk.PhotoImage(self.resizebleJoin)
+                self.Jlobby = Button(self, image= self.paintJoin,command = self.Open_Lobby, background="#2BB807")
+                self.Jlobby.place(x=700, y=260)
                 #self.clear_text()
                 self.btn_login.place_forget()
                 self.btn_logout = Button(self, text= "Logout", command= self.Log_out ,font=30, background= "#c7594b")
