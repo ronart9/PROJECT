@@ -75,6 +75,7 @@ class Lobby(tkinter.Toplevel):
         self.list.place(x= 65, y= 92)
 
         self.handle_waiting_for_player()
+        self.handle_waiting_for_message()
 
 
 
@@ -117,10 +118,10 @@ class Lobby(tkinter.Toplevel):
     def waiting_for__message(self):
         data = self.parent.client_socket.recv(1024).decode()
         if data == "playerleave":
-            pass
-
-
-
+            self.Conn_Pl.set("Pleyer left...")
+            time.sleep(1)
+            self.Conn_Pl.set("Waiting for Player 2...")
+            self.handle_waiting_for_player()
 
     def Animation_Ent_Lobby(self):
         self.Conn_Pl.set("Pleyer 2 connected")
@@ -177,9 +178,9 @@ class Lobby(tkinter.Toplevel):
 
     def close(self):
         #self.list.delete(0, END)
-        #message = ["LeaveLobby", self.parent.username]
-        #data = ",".join(message)
-        #self.parent.client_socket.send(data.encode())
+        message = ["LeaveLobby", self.parent.username]
+        data = ",".join(message)
+        self.parent.client_socket.send(data.encode())
         #message = self.parent.client_socket.recv(1024).decode()
         self.parent.deiconify() #show parent
         self.destroy()# close and destroy this screen

@@ -27,3 +27,12 @@ class Game(tkinter.Toplevel):
     def create_gui(self):
         self.configure(bg='#ffb838')  # -using color HEX
         # ----------------------------------------------------------------------------------------------
+        self.ent_guess = Entry(self, font=50)
+        self.ent_guess.place(x=430, y=450)
+        # ----------------------------------------------------------------------------------------------
+        self.btn_guess = Button(self, text='GUESS',command= self.Guess_img , font=30, background="#b7f061")
+        self.btn_guess.place(x=500, y=500)
+
+
+    def Guess_img(self):
+        pass
