@@ -44,6 +44,11 @@ class Game(tkinter.Toplevel):
         self.img = ImageTk.PhotoImage(self.resized)
         self.lbl_img = Label(self, image=self.img)
         self.lbl_img.place(x=300, y=30)
+        # ----------------------------------------------------------------------------------------------
+        self.guessLBL = StringVar()
+        self.guessLBL.set("guess the word:")
+        self.lab_wtg = Label(self, textvariable=self.guessLBL, fg='#1ef800', bg='#909090', font=('Helvetica bold', 16))
+        self.lab_wtg.place(x=400, y=10)
 
 
     def random_num(self, num):
@@ -51,5 +56,8 @@ class Game(tkinter.Toplevel):
 
 
     def Guess_img(self):
-        pass
+        if (self.ent_guess.get() == self.arrImg[self.randomNum][0]):
+            self.guessLBL.set("correct")
+        else:
+            self.guessLBL.set("false")
 
