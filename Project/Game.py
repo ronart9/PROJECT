@@ -37,7 +37,7 @@ class Game(tkinter.Toplevel):
         self.btn_guess = Button(self, text='GUESS',command= self.Guess_img , font=30, background="#b7f061")
         self.btn_guess.place(x=500, y=500)
         # ----------------------------------------------------------------------------------------------
-        self.randomNum = self.random_num(2)
+        self.randomNum = self.random_num(len(self.arrImg)-1)
         self.img_add = self.arrImg[self.randomNum][1]
         self.img_ad = Image.open(self.img_add)
         self.resized = self.img_ad.resize((500, 400), Image.Resampling.LANCZOS)
