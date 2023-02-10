@@ -91,7 +91,7 @@ class Lobby(tkinter.Toplevel):
         self.Client_handler.start()
 
     def handle_waiting_for_message(self):
-        self.Client_handler = threading.Thread(target=self.waiting_for__message, args=())
+        self.Client_handler = threading.Thread(target=self.waiting_for_message, args=())
         self.Client_handler.daemon = True
         self.Client_handler.start()
 
@@ -115,7 +115,7 @@ class Lobby(tkinter.Toplevel):
             self.list.insert(2, arr[0])
             self.Animation_Ent_Lobby()
 
-    def waiting_for__message(self):
+    def waiting_for_message(self):
         data = self.parent.client_socket.recv(1024).decode()
         if data == "playerleave":
             self.Conn_Pl.set("Pleyer left...")
@@ -176,8 +176,13 @@ class Lobby(tkinter.Toplevel):
         time.sleep(1)
         self.SGame()
 
+    def remove_player(self, player):
+        index = self.list.get(0, END).index(player)
+        self.list.delete(index)
+
     def close(self):
         #self.list.delete(0, END)
+        #self.remove_player(self.parent.username)
         message = ["LeaveLobby", self.parent.username]
         data = ",".join(message)
         self.parent.client_socket.send(data.encode())

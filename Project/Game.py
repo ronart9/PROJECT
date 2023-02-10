@@ -6,6 +6,8 @@ from tkinter import ttk, messagebox
 #from users import  *
 from PIL import ImageTk, Image
 from UserDB import *
+import random
+
 
 
 #https://www.pythontutorial.net/tkinter/tkinter-toplevel/
@@ -17,10 +19,12 @@ class Game(tkinter.Toplevel):
     def __init__(self, parent):
         super().__init__(parent)
         self.parent = parent
-        self.geometry('1200x600')
+        self.geometry('1105x600')
         self.resizable(width=False, height=False)
         self.title('Game Screen')
         self.userDb = UserDB()
+
+        self.arrImg = [["tree", "../Project/images/tree.png"],["ghost", "../Project/images/ghost.png"] ,["car", "../Project/images/car.png"] ]
 
         self.create_gui()
 
@@ -32,7 +36,20 @@ class Game(tkinter.Toplevel):
         # ----------------------------------------------------------------------------------------------
         self.btn_guess = Button(self, text='GUESS',command= self.Guess_img , font=30, background="#b7f061")
         self.btn_guess.place(x=500, y=500)
+        # ----------------------------------------------------------------------------------------------
+        self.randomNum = self.random_num(2)
+        self.img_add = self.arrImg[self.randomNum][1]
+        self.img_ad = Image.open(self.img_add)
+        self.resized = self.img_ad.resize((500, 400), Image.Resampling.LANCZOS)
+        self.img = ImageTk.PhotoImage(self.resized)
+        self.lbl_img = Label(self, image=self.img)
+        self.lbl_img.place(x=300, y=30)
+
+
+    def random_num(self, num):
+        return random.randint(0, num)
 
 
     def Guess_img(self):
         pass
+

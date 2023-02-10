@@ -97,22 +97,10 @@ class Menu_Screen(tkinter.Tk):
         self.lab_plz_login = Label(self, textvariable=self.plz, bg='#856ff8' ,font=('Helvetica bold', 16))
         self.lab_plz_login.place(x=700, y=112)
         # ----------------------------------------------------------------------------------------------
-
-
-
-
         self.handle_thread_socket()
 
-    # def open_register(self):
-    # window = Register(self)
-    # window.grab_set()
-    # self.withdraw()
 
-    # def open_login(self):
-    # Login(self)
-    # window = Login(self)
-    # window.grab_set()
-    # self.withdraw()
+
     def handle_thread_socket(self):
         client_handler = threading.Thread(target=self.create_socket, args=())
         client_handler.daemon = True

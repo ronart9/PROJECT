@@ -115,13 +115,14 @@ class Server(object):
             socket2.send(str_data1.encode())
 
     def leaveLobby(self, client_socket, arr):
-        print(arr[1])
-        if(arr[1] == self.players[0].name):
-            self.players.remove(self.players[0])
-            self.players[1].send("playerleave".encode())
-        elif (arr[1] == self.players[1].name):
-            self.players.remove(self.players[1])
-            self.players[0].send("playerleave".encode())
+        while True:
+            print(arr[1])
+            if(arr[1] == self.players[0].name):
+                self.players.remove(self.players[0])
+                self.players[1].send("playerleave".encode())
+            elif (arr[1] == self.players[1].name):
+                self.players.remove(self.players[1])
+                self.players[0].send("playerleave".encode())
 
 
 
