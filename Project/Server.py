@@ -72,6 +72,7 @@ class Server(object):
                         client_socket.send(messege.encode())
                     elif not username:
                         # messagebox.showerror("error message", "Error")
+                        client_socket.send("Failed !".encode())
                         client_socket.send("Failed to Login !".encode())
 
                 elif arr and arr[0] == "JoinLobby" and len(arr) == 2:

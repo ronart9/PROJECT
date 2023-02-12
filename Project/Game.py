@@ -24,7 +24,9 @@ class Game(tkinter.Toplevel):
         self.title('Game Screen')
         self.userDb = UserDB()
 
-        self.arrImg = [["tree", "../Project/images/tree.png"],["ghost", "../Project/images/ghost.png"] ,["car", "../Project/images/car.png"] ]
+        self.arrImg = [["tree", "../Project/images/tree.png"],
+                       ["ghost", "../Project/images/ghost.png"] ,
+                       ["car", "../Project/images/car.png"] ]
 
         self.create_gui()
 
@@ -37,18 +39,24 @@ class Game(tkinter.Toplevel):
         self.btn_guess = Button(self, text='GUESS',command= self.Guess_img , font=30, background="#b7f061")
         self.btn_guess.place(x=500, y=500)
         # ----------------------------------------------------------------------------------------------
-        self.randomNum = self.random_num(len(self.arrImg)-1)
+        #self.UploadImg()
+        # ----------------------------------------------------------------------------------------------
+        self.guessLBL = StringVar()
+        self.guessLBL.set("guess the word:")
+        self.lab_wtg = Label(self, textvariable=self.guessLBL, fg='#1ef800', bg='#909090', font=('Helvetica bold', 16))
+        self.lab_wtg.place(x=400, y=10)
+        # ----------------------------------------------------------------------------------------------
+        self.handle_thread_gamef()
+
+
+    def UploadImg(self):
+        self.randomNum = self.random_num(len(self.arrImg) - 1)
         self.img_add = self.arrImg[self.randomNum][1]
         self.img_ad = Image.open(self.img_add)
         self.resized = self.img_ad.resize((500, 400), Image.Resampling.LANCZOS)
         self.img = ImageTk.PhotoImage(self.resized)
         self.lbl_img = Label(self, image=self.img)
         self.lbl_img.place(x=300, y=30)
-        # ----------------------------------------------------------------------------------------------
-        self.guessLBL = StringVar()
-        self.guessLBL.set("guess the word:")
-        self.lab_wtg = Label(self, textvariable=self.guessLBL, fg='#1ef800', bg='#909090', font=('Helvetica bold', 16))
-        self.lab_wtg.place(x=400, y=10)
 
 
     def random_num(self, num):
@@ -56,8 +64,41 @@ class Game(tkinter.Toplevel):
 
 
     def Guess_img(self):
-        if (self.ent_guess.get() == self.arrImg[self.randomNum][0]):
-            self.guessLBL.set("correct")
-        else:
-            self.guessLBL.set("false")
+        try:
+            if (self.ent_guess.get() == self.arrImg[self.randomNum][0]):
+                self.guessLBL.set("correct")
+
+            else:
+                self.guessLBL.set("false")
+
+        except:
+            self.guessLBL.set("error")
+
+    def handle_thread_gamef(self):
+        client_handler = threading.Thread(target=self.GameF, args=())
+        client_handler.daemon = True
+        client_handler.start()
+
+    def GameF(self):
+        try:
+            self.roundLBL = StringVar()
+            toprounds = len(self.arrImg)
+            self.roundLBL.set("1 / " + str(toprounds))
+            self.lab_rounds = Label(self, textvariable=self.roundLBL, fg='#000000', bg='#ffb838',
+                                    font=('Helvetica bold', 16))
+            self.lab_rounds.place(x=20, y=500)
+            for i in range(toprounds):
+                self.roundLBL.set(str(i+1) + " / " + str(toprounds))
+                self.guessLBL.set("guess the word:")
+                self.UploadImg()
+                #rounds = 1
+                #while rounds != toprounds:
+                while self.guessLBL.get() != "correct":
+                    self.update()
+
+
+
+
+        except:
+            print("error")
 

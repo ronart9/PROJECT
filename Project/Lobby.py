@@ -67,10 +67,11 @@ class Lobby(tkinter.Toplevel):
         self.lbl_LobbyTXT = Label(self, bg='#909090' , image=self.paint)
         self.lbl_LobbyTXT.place(x=80, y=35)
         # ----------------------------------------------------------------------------------------------
-        self.list = Listbox(self , height = 6)
+        self.list = Listbox(self , height = 6, bg = "black", fg= "green", )
         email = self.parent.ent_email.get()
         password = self.parent.ent_password.get()
-        username = self.userDb.return_user_by_email(email, password)
+        username = self.parent.username
+        #username = self.userDb.return_user_by_email(email, password)
         self.list.insert(1, username)
         self.list.place(x= 65, y= 92)
 
