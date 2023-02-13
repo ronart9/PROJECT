@@ -26,7 +26,10 @@ class Game(tkinter.Toplevel):
 
         self.arrImg = [["tree", "../Project/images/tree.png"],
                        ["ghost", "../Project/images/ghost.png"] ,
-                       ["car", "../Project/images/car.png"] ]
+                       ["car", "../Project/images/car.png"] ,
+                       ["banana", "../Project/images/banana.png"],
+                       ["beach", "../Project/images/beach.png"],
+                       ["dog", "../Project/images/dog.png"]]
 
         self.create_gui()
 
@@ -44,7 +47,7 @@ class Game(tkinter.Toplevel):
         self.guessLBL = StringVar()
         self.guessLBL.set("guess the word:")
         self.lab_wtg = Label(self, textvariable=self.guessLBL, fg='#1ef800', bg='#909090', font=('Helvetica bold', 16))
-        self.lab_wtg.place(x=400, y=10)
+        self.lab_wtg.place(x=900, y=500)
         # ----------------------------------------------------------------------------------------------
         self.handle_thread_gamef()
 
@@ -67,10 +70,9 @@ class Game(tkinter.Toplevel):
         try:
             if (self.ent_guess.get() == self.arrImg[self.randomNum][0]):
                 self.guessLBL.set("correct")
-
             else:
                 self.guessLBL.set("false")
-
+                self.ent_guess.delete(0, END)
         except:
             self.guessLBL.set("error")
 
@@ -85,9 +87,10 @@ class Game(tkinter.Toplevel):
             toprounds = len(self.arrImg)
             self.roundLBL.set("1 / " + str(toprounds))
             self.lab_rounds = Label(self, textvariable=self.roundLBL, fg='#000000', bg='#ffb838',
-                                    font=('Helvetica bold', 16))
-            self.lab_rounds.place(x=20, y=500)
+                                    font=('Helvetica bold', 25))
+            self.lab_rounds.place(x=70, y=500)
             for i in range(toprounds):
+                self.ent_guess.delete(0, END)
                 self.roundLBL.set(str(i+1) + " / " + str(toprounds))
                 self.guessLBL.set("guess the word:")
                 self.UploadImg()
@@ -95,6 +98,10 @@ class Game(tkinter.Toplevel):
                 #while rounds != toprounds:
                 while self.guessLBL.get() != "correct":
                     self.update()
+            self.guessLBL.set("YOU WON !!")
+            self.ent_guess.delete(0, END)
+            self.ent_guess.config(state="disabled")
+
 
 
 
