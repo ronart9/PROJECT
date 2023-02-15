@@ -30,7 +30,8 @@ class Game(tkinter.Toplevel):
                        ["banana", "../Project/images/banana.png"],
                        ["beach", "../Project/images/beach.png"],
                        ["dog", "../Project/images/dog.png"],
-                       ["python", "../Project/images/python.png"]]
+                       ["python", "../Project/images/python.png"],
+                       ["burger", "../Project/images/burger.png"]]
 
         self.create_gui()
 
@@ -50,7 +51,7 @@ class Game(tkinter.Toplevel):
         self.lab_wtg = Label(self, textvariable=self.guessLBL, fg='#1ef800', bg='#909090', font=('Helvetica bold', 16))
         self.lab_wtg.place(x=900, y=500)
         # ----------------------------------------------------------------------------------------------
-        self.lab_capitals = Label(self, text= "* make sure to not use capital letters *", fg='#c22620', bg='#ffb838', font=('Helvetica bold', 9))
+        self.lab_capitals = Label(self, text= "* make sure to NOT use capital letters *", fg='#c22620', bg='#ffb838', font=('Helvetica bold', 9))
         self.lab_capitals.place(x=430, y=480)
         # ----------------------------------------------------------------------------------------------
         self.handle_thread_gamef()
