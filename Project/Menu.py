@@ -42,12 +42,12 @@ class Menu_Screen(tkinter.Tk):
         self.emailvar = StringVar()
         self.lab_email = Label(self, text='Enter Email: ', font=('Helvetica bold', 15), bg='#5b3cbd')
         self.lab_email.place(x=100, y=120)
-        self.ent_email = Entry(self, textvariable=self.emailvar, font=30)
+        self.ent_email = Entry(self, textvariable=self.emailvar, font=40)
         self.ent_email.place(x=100, y=165)
         # ----------------------------------------------------------------------------------------------
         self.lab_password = Label(self, text='Enter Password: ', font=('Helvetica bold', 15), bg='#5b3cbd')
         self.lab_password.place(x=100, y=235)
-        self.ent_password = Entry(self, show="*", font=30)
+        self.ent_password = Entry(self, show="*", font=40)
         self.ent_password.place(x=100, y=280)
         # ----------------------------------------------------------------------------------------------
         self.img3_adress = "img_1.png"

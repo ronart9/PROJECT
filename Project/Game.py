@@ -29,7 +29,8 @@ class Game(tkinter.Toplevel):
                        ["car", "../Project/images/car.png"] ,
                        ["banana", "../Project/images/banana.png"],
                        ["beach", "../Project/images/beach.png"],
-                       ["dog", "../Project/images/dog.png"]]
+                       ["dog", "../Project/images/dog.png"],
+                       ["python", "../Project/images/python.png"]]
 
         self.create_gui()
 
@@ -48,6 +49,9 @@ class Game(tkinter.Toplevel):
         self.guessLBL.set("guess the word:")
         self.lab_wtg = Label(self, textvariable=self.guessLBL, fg='#1ef800', bg='#909090', font=('Helvetica bold', 16))
         self.lab_wtg.place(x=900, y=500)
+        # ----------------------------------------------------------------------------------------------
+        self.lab_capitals = Label(self, text= "* make sure to not use capital letters *", fg='#c22620', bg='#ffb838', font=('Helvetica bold', 9))
+        self.lab_capitals.place(x=430, y=480)
         # ----------------------------------------------------------------------------------------------
         self.handle_thread_gamef()
 
@@ -94,8 +98,6 @@ class Game(tkinter.Toplevel):
                 self.roundLBL.set(str(i+1) + " / " + str(toprounds))
                 self.guessLBL.set("guess the word:")
                 self.UploadImg()
-                #rounds = 1
-                #while rounds != toprounds:
                 while self.guessLBL.get() != "correct":
                     self.update()
             self.guessLBL.set("YOU WON !!")
