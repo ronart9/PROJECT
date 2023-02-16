@@ -108,8 +108,8 @@ class Server(object):
             player2 = self.players[1]
             socket1 = player1.client_socket
             socket2 = player2.client_socket
-            data1 = ["player1", "start"]
-            data2 = ["player2", "start"]
+            data1 = [player1.name, "start"]
+            data2 = [player2.name, "start"]
             str_data1 = ",".join(data1)
             str_data2 = ",".join(data2)
             socket1.send(str_data2.encode())
