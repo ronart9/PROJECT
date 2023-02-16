@@ -48,7 +48,7 @@ class Game(tkinter.Toplevel):
         # ----------------------------------------------------------------------------------------------
         self.guessLBL = StringVar()
         self.guessLBL.set("guess the word:")
-        self.lab_wtg = Label(self, textvariable=self.guessLBL, fg='#1ef800', bg='#909090', font=('Helvetica bold', 16))
+        self.lab_wtg = Label(self, textvariable=self.guessLBL, fg='#000000', bg='#daae29', font=('Helvetica bold', 16))
         self.lab_wtg.place(x=900, y=500)
         # ----------------------------------------------------------------------------------------------
         self.lab_capitals = Label(self, text= "* make sure to NOT use capital letters *", fg='#c22620', bg='#ffb838', font=('Helvetica bold', 9))
@@ -75,8 +75,10 @@ class Game(tkinter.Toplevel):
         try:
             if (self.ent_guess.get() == self.arrImg[self.randomNum][0]):
                 self.guessLBL.set("correct")
+                #self.lab_wtg.config(fg="23e804")
             else:
                 self.guessLBL.set("false")
+                #self.lab_wtg.config(fg= "red")
                 self.ent_guess.delete(0, END)
         except:
             self.guessLBL.set("error")
@@ -104,6 +106,7 @@ class Game(tkinter.Toplevel):
             self.guessLBL.set("YOU WON !!")
             self.ent_guess.delete(0, END)
             self.ent_guess.config(state="disabled")
+            self.btn_guess.config(state="disabled")
 
 
 
