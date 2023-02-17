@@ -42,10 +42,10 @@ class Menu_Screen(tkinter.Tk):
         self.bg_Log.create_rectangle(10, 10, 320, 480, outline="#5b3cbd", width= 5 ,fill= "#5b3cbd")
         self.bg_Log.place(x= 50, y= 50)
         # ----------------------------------------------------------------------------------------------
-        self.emailvar = StringVar()
+        #self.emailvar = StringVar()
         self.lab_email = Label(self, text='Enter Email: ', font=('Helvetica bold', 15), bg='#5b3cbd')
         self.lab_email.place(x=100, y=120)
-        self.ent_email = Entry(self, textvariable=self.emailvar, font=40)
+        self.ent_email = Entry(self, font=40)
         self.ent_email.place(x=100, y=165)
         # ----------------------------------------------------------------------------------------------
         self.lab_password = Label(self, text='Enter Password: ', font=('Helvetica bold', 15), bg='#5b3cbd')

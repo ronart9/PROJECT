@@ -70,9 +70,9 @@ class Lobby(tkinter.Toplevel):
         self.list = Listbox(self , height = 6, bg = "black", fg= "green", )
         email = self.parent.ent_email.get()
         password = self.parent.ent_password.get()
-        username = self.parent.username
+        self.username = self.parent.username
         #username = self.userDb.return_user_by_email(email, password)
-        self.list.insert(1, username)
+        self.list.insert(1, self.username)
         self.list.place(x= 65, y= 92)
 
         self.handle_waiting_for_player()
@@ -106,14 +106,17 @@ class Lobby(tkinter.Toplevel):
         data = self.parent.client_socket.recv(1024).decode()
         arr = data.split(",")
         print(arr)
+        self.num = 2
         if(arr[1] == "wait"):
             data = self.parent.client_socket.recv(1024).decode()
             data = data.split(",")
-            self.list.insert(2, data[0])
+            #self.num1set = 2
+            self.list.insert(2, data[0]+ f" [player {self.num}]")
             self.Animation_Ent_Lobby()
         elif(arr[1] == "start"):
             print(arr[0], " join us ")
-            self.list.insert(2, arr[0])
+            #self.num2set= 1
+            self.list.insert(2, arr[0]+ f" [player {self.num}]")
             self.Animation_Ent_Lobby()
 
     def waiting_for_message(self):

@@ -31,12 +31,24 @@ class Game(tkinter.Toplevel):
                        ["beach", "../Project/images/beach.png"],
                        ["dog", "../Project/images/dog.png"],
                        ["python", "../Project/images/python.png"],
-                       ["burger", "../Project/images/burger.png"]]
+                       ["burger", "../Project/images/burger.png"],
+                       ["robot", "../Project/images/robot.PNG"],
+                       ["panda", "../Project/images/panda.PNG"],
+                       ["city", "../Project/images/city.jpg"]]
 
         self.create_gui()
 
     def create_gui(self):
         self.configure(bg='#ffb838')  # -using color HEX
+        # ----------------------------------------------------------------------------------------------
+        self.bg_P2stats = Canvas(self, width=180, height=240, bg='#ee890c', highlightthickness=0)
+        self.bg_P2stats.place(x=50, y=125)
+        # ----------------------------------------------------------------------------------------------
+        self.lab_stats = Label(self, text='STATS', font=('Helvetica bold', 25), bg='#ee890c')
+        self.lab_stats.place(x=75, y=140)
+        # ----------------------------------------------------------------------------------------------
+        self.lab_round = Label(self, text='rounds', font=('Helvetica bold', 15), bg='#ee890c')
+        self.lab_round.place(x=80, y=225)
         # ----------------------------------------------------------------------------------------------
         self.ent_guess = Entry(self, font=50)
         self.ent_guess.place(x=430, y=450)
@@ -91,11 +103,11 @@ class Game(tkinter.Toplevel):
     def GameF(self):
         try:
             self.roundLBL = StringVar()
-            toprounds = len(self.arrImg)
+            toprounds = 10
             self.roundLBL.set("1 / " + str(toprounds))
-            self.lab_rounds = Label(self, textvariable=self.roundLBL, fg='#000000', bg='#ffb838',
+            self.lab_rounds = Label(self, textvariable=self.roundLBL, fg='#000000', bg='#ee890c',
                                     font=('Helvetica bold', 25))
-            self.lab_rounds.place(x=70, y=500)
+            self.lab_rounds.place(x=75, y=190)
             for i in range(toprounds):
                 self.ent_guess.delete(0, END)
                 self.roundLBL.set(str(i+1) + " / " + str(toprounds))
