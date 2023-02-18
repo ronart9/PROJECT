@@ -34,7 +34,12 @@ class Game(tkinter.Toplevel):
                        ["burger", "../Project/images/burger.png"],
                        ["robot", "../Project/images/robot.PNG"],
                        ["panda", "../Project/images/panda.PNG"],
-                       ["city", "../Project/images/city.jpg"]]
+                       ["city", "../Project/images/city.jpg"],
+                       ["skull", "../Project/images/skull.png"],
+                       ["racoon", "../Project/images/racoon.png"],
+                       ["crow", "../Project/images/crow.PNG"],
+                       ["ship", "../Project/images/ship.jpg"],
+                       ["pasta", "../Project/images/pasta.png"]]
 
         self.create_gui()
 
