@@ -122,19 +122,19 @@ class Lobby(tkinter.Toplevel):
     def waiting_for_message(self):
         data = self.parent.client_socket.recv(1024).decode()
         if data == "playerleave":
-            self.Conn_Pl.set("Pleyer left...")
+            self.Conn_Pl.set("Player left...")
             time.sleep(1)
             self.Conn_Pl.set("Waiting for Player 2...")
             self.handle_waiting_for_player()
 
     def Animation_Ent_Lobby(self):
-        self.Conn_Pl.set("Pleyer 2 connected")
+        self.Conn_Pl.set("Player 2 connected")
         time.sleep(1)
-        self.Conn_Pl.set("Pleyer 2 connected .")
+        self.Conn_Pl.set("Player 2 connected .")
         time.sleep(1)
-        self.Conn_Pl.set("Pleyer 2 connected ..")
+        self.Conn_Pl.set("Player 2 connected ..")
         time.sleep(1)
-        self.Conn_Pl.set("Pleyer 2 connected ...")
+        self.Conn_Pl.set("Player 2 connected ...")
         time.sleep(1)
         self.Conn_Pl.set("")
         time.sleep(0.3)

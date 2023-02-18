@@ -70,7 +70,15 @@ class Game(tkinter.Toplevel):
 
 
     def UploadImg(self):
+        #self.random_nums = []
+        #not_same = True
         self.randomNum = self.random_num(len(self.arrImg) - 1)
+        #while not_same == True:
+            #if (self.randomNum in self.random_nums):
+                #self.randomNum = self.random_num(len(self.arrImg) - 1)
+            #else:
+                #not_same = False
+        #self.random_nums.append(self.randomNum)
         self.img_add = self.arrImg[self.randomNum][1]
         self.img_ad = Image.open(self.img_add)
         self.resized = self.img_ad.resize((500, 400), Image.Resampling.LANCZOS)
@@ -81,6 +89,7 @@ class Game(tkinter.Toplevel):
 
     def random_num(self, num):
         return random.randint(0, num)
+
 
 
     def Guess_img(self):
@@ -119,10 +128,6 @@ class Game(tkinter.Toplevel):
             self.ent_guess.delete(0, END)
             self.ent_guess.config(state="disabled")
             self.btn_guess.config(state="disabled")
-
-
-
-
 
         except:
             print("error")
