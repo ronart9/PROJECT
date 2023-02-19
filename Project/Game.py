@@ -60,6 +60,7 @@ class Game(tkinter.Toplevel):
         self.ent_guess.place(x=430, y=450)
         # ----------------------------------------------------------------------------------------------
         self.btn_guess = Button(self, text='GUESS',command= self.Guess_img , font=30, background="#b7f061")
+        self.bind("<Return>", lambda event: self.btn_guess.invoke())
         self.btn_guess.place(x=500, y=500)
         # ----------------------------------------------------------------------------------------------
         #self.UploadImg()
@@ -74,6 +75,8 @@ class Game(tkinter.Toplevel):
         # ----------------------------------------------------------------------------------------------
         self.handle_thread_gamef()
 
+    def button_pressed(self):
+        self.btn_guess.invoke()
 
     def UploadImg(self):
         #self.random_nums = []
@@ -89,10 +92,10 @@ class Game(tkinter.Toplevel):
         self.img_ad = Image.open(self.img_add)
         self.resized = self.img_ad.resize((500, 400), Image.Resampling.LANCZOS)
         self.img = ImageTk.PhotoImage(self.resized)
-        self.arr2.append(self.arrImg[self.randomNum])
+        #self.arr2.append(self.arrImg[self.randomNum])
         self.lbl_img = Label(self, image=self.img)
         self.lbl_img.place(x=300, y=30)
-        self.arrImg.remove(self.arrImg[self.randomNum])
+        #self.arrImg.remove(self.arrImg[self.randomNum])
 
 
 
@@ -137,9 +140,9 @@ class Game(tkinter.Toplevel):
             self.ent_guess.delete(0, END)
             self.ent_guess.config(state="disabled")
             self.btn_guess.config(state="disabled")
-            for n in range(len(self.arr2)):
-                self.arrImg.append(self.arr2[n])
-                self.arr2.remove(self.arr2[n])
+            #for n in range(len(self.arr2)):
+                #self.arrImg.append(self.arr2[n])
+                #self.arr2.remove(self.arr2[n])
 
         except:
             print("error")
