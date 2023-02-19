@@ -40,6 +40,7 @@ class Game(tkinter.Toplevel):
                        ["crow", "../Project/images/crow.PNG"],
                        ["ship", "../Project/images/ship.jpg"],
                        ["pasta", "../Project/images/pasta.png"]]
+        self.arr2 = []
 
         self.create_gui()
 
@@ -88,8 +89,11 @@ class Game(tkinter.Toplevel):
         self.img_ad = Image.open(self.img_add)
         self.resized = self.img_ad.resize((500, 400), Image.Resampling.LANCZOS)
         self.img = ImageTk.PhotoImage(self.resized)
+        self.arr2.append(self.arrImg[self.randomNum])
         self.lbl_img = Label(self, image=self.img)
         self.lbl_img.place(x=300, y=30)
+        self.arrImg.remove(self.arrImg[self.randomNum])
+
 
 
     def random_num(self, num):
@@ -133,6 +137,9 @@ class Game(tkinter.Toplevel):
             self.ent_guess.delete(0, END)
             self.ent_guess.config(state="disabled")
             self.btn_guess.config(state="disabled")
+            for n in range(len(self.arr2)):
+                self.arrImg.append(self.arr2[n])
+                self.arr2.remove(self.arr2[n])
 
         except:
             print("error")

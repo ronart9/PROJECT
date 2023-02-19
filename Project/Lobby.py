@@ -187,9 +187,9 @@ class Lobby(tkinter.Toplevel):
     def close(self):
         #self.list.delete(0, END)
         #self.remove_player(self.parent.username)
-        message = ["LeaveLobby", self.parent.username]
-        data = ",".join(message)
-        self.parent.client_socket.send(data.encode())
+        #message = ["LeaveLobby", self.parent.username]
+        #data = ",".join(message)
+        #self.parent.client_socket.send(data.encode())
         #message = self.parent.client_socket.recv(1024).decode()
         self.parent.deiconify() #show parent
         self.destroy()# close and destroy this screen
