@@ -75,8 +75,8 @@ class Game(tkinter.Toplevel):
         # ----------------------------------------------------------------------------------------------
         self.handle_thread_gamef()
 
-    def button_pressed(self):
-        self.btn_guess.invoke()
+    #def button_pressed(self):
+        #self.btn_guess.invoke()
 
     def UploadImg(self):
         #self.random_nums = []
@@ -140,10 +140,14 @@ class Game(tkinter.Toplevel):
             self.ent_guess.delete(0, END)
             self.ent_guess.config(state="disabled")
             self.btn_guess.config(state="disabled")
+            username = self.parent.username
+            arr = ["WinScreen", username]
+            data = ",".join(arr)
+            self.parent.client_socket.send(data.encode())
             #for n in range(len(self.arr2)):
                 #self.arrImg.append(self.arr2[n])
                 #self.arr2.remove(self.arr2[n])
 
         except:
-            print("error")
+            print("error - GameF")
 

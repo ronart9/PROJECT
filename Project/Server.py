@@ -82,7 +82,8 @@ class Server(object):
                 elif arr and arr[0] == "LeaveLobby" and len(arr) == 2:
                     self.leaveLobby(client_socket, arr)
 
-
+                elif arr and arr[0] == "WinScreen" and len(arr) == 2:
+                    self.Win_Screen(client_socket, arr)
 
                 elif arr != None and arr[0] == "get_all_users" and len(arr) == 1:
                     print("get_all_users")
@@ -124,6 +125,9 @@ class Server(object):
             elif (arr[1] == self.players[1].name):
                 self.players.remove(self.players[1])
                 self.players[0].send("playerleave".encode())
+
+    def Win_Screen(self, client_socket, arr):
+        pass
 
 
 
