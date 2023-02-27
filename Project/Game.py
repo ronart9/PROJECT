@@ -7,6 +7,7 @@ from tkinter import ttk, messagebox
 from PIL import ImageTk, Image
 from UserDB import *
 import random
+from Winner import Winner
 
 
 
@@ -129,25 +130,37 @@ class Game(tkinter.Toplevel):
             self.lab_rounds = Label(self, textvariable=self.roundLBL, fg='#000000', bg='#ee890c',
                                     font=('Helvetica bold', 25))
             self.lab_rounds.place(x=75, y=190)
-            for i in range(toprounds):
+            trues = True
+            while trues:
+                for i in range(toprounds):
+                    self.ent_guess.delete(0, END)
+                    self.roundLBL.set(str(i+1) + " / " + str(toprounds))
+                    self.guessLBL.set("guess the word:")
+                    self.UploadImg()
+                    while self.guessLBL.get() != "correct":
+                        self.update()
+                self.guessLBL.set("YOU WON !!")
                 self.ent_guess.delete(0, END)
-                self.roundLBL.set(str(i+1) + " / " + str(toprounds))
-                self.guessLBL.set("guess the word:")
-                self.UploadImg()
-                while self.guessLBL.get() != "correct":
-                    self.update()
-            self.guessLBL.set("YOU WON !!")
-            self.ent_guess.delete(0, END)
-            self.ent_guess.config(state="disabled")
-            self.btn_guess.config(state="disabled")
-            username = self.parent.username
-            arr = ["WinScreen", username]
-            data = ",".join(arr)
-            self.parent.client_socket.send(data.encode())
-            #for n in range(len(self.arr2)):
-                #self.arrImg.append(self.arr2[n])
-                #self.arr2.remove(self.arr2[n])
+                self.ent_guess.config(state="disabled")
+                self.btn_guess.config(state="disabled")
+                username = self.parent.username
+                arr = ["WinScreen", username]
+                data = ",".join(arr)
+                self.parent.client_socket.send(data.encode())
+                data1 = self.parent.client_socket.recv(1024).decode()
+                arr1 = data1.split(",")
+                if arr1[1] == "CloseWindowGame":
+                    trues = False
+                #for n in range(len(self.arr2)):
+                    #self.arrImg.append(self.arr2[n])
+                    #self.arr2.remove(self.arr2[n])
+            self.OpenWinScreen()
 
         except:
             print("error - GameF")
 
+
+    def OpenWinScreen(self):
+        window = Winner(self)
+        window.grab_set()
+        self.withdraw()

@@ -82,6 +82,7 @@ class Server(object):
                 elif arr and arr[0] == "LeaveLobby" and len(arr) == 2:
                     self.leaveLobby(client_socket, arr)
 
+
                 elif arr and arr[0] == "WinScreen" and len(arr) == 2:
                     self.Win_Screen(client_socket, arr)
 
@@ -127,7 +128,16 @@ class Server(object):
                 self.players[0].send("playerleave".encode())
 
     def Win_Screen(self, client_socket, arr):
-        pass
+        player1 = self.players[0]
+        player2 = self.players[1]
+        socket1 = player1.client_socket
+        socket2 = player2.client_socket
+        data1 = [player1.name, "CloseWindowGame"]
+        data2 = [player2.name, "CloseWindowGame"]
+        str_data1 = ",".join(data1)
+        str_data2 = ",".join(data2)
+        socket1.send(str_data2.encode())
+        socket2.send(str_data1.encode())
 
 
 
