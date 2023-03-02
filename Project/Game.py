@@ -146,14 +146,20 @@ class Game(tkinter.Toplevel):
                 username = self.parent.username
                 arr = ["WinScreen", username]
                 data = ",".join(arr)
-                self.parent.client_socket.send(data.encode())
-                data1 = self.parent.client_socket.recv(1024).decode()
+                print("1 -")
+                self.parent.parent.client_socket.send(data.encode())
+                print("2 -")
+                data1 = self.parent.parent.client_socket.recv(1024).decode()
+                print("3 -")
                 arr1 = data1.split(",")
+                print("4 -")
                 if arr1[1] == "CloseWindowGame":
+                    print("5 -")
                     trues = False
                 #for n in range(len(self.arr2)):
                     #self.arrImg.append(self.arr2[n])
                     #self.arr2.remove(self.arr2[n])
+            print("6 -")
             self.OpenWinScreen()
 
         except:

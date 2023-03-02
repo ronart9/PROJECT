@@ -134,10 +134,15 @@ class Server(object):
         socket2 = player2.client_socket
         data1 = [player1.name, "CloseWindowGame"]
         data2 = [player2.name, "CloseWindowGame"]
+        print("E1")
         str_data1 = ",".join(data1)
+        print("E2")
         str_data2 = ",".join(data2)
+        print("E3")
         socket1.send(str_data2.encode())
+        print("E4")
         socket2.send(str_data1.encode())
+        print("E5")
 
 
 
