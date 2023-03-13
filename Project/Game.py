@@ -125,22 +125,32 @@ class Game(tkinter.Toplevel):
     def GameF(self):
         try:
             self.roundLBL = StringVar()
+            self.roundLBL2 = StringVar()
             toprounds = 10
             self.roundLBL.set("1 / " + str(toprounds))
+            self.roundLBL2.set("1 / " + str(toprounds))
             self.lab_rounds = Label(self, textvariable=self.roundLBL, fg='#000000', bg='#ee890c',
                                     font=('Helvetica bold', 25))
-            self.lab_rounds.place(x=75, y=190)
-            self.rounds = 0
+            self.lab2_rounds = Label(self, textvariable=self.roundLBL2, fg='#000000', bg='#ee890c',
+                                    font=('Helvetica bold', 25))
+            self.lab_rounds.place(x=75, y=195)
+            self.lab2_rounds.place(x=75, y=450)
+            self.rounds1 = 0
+            self.rounds2 = 0
             trues = True
             while trues:
                 for i in range(toprounds):
                     print(i)
-                    self.rounds += 1
-                    self.arr_rounds = ["Rounds", str(self.rounds)]
+                    self.rounds1 += 1
+                    self.rounds2 += 1
+                    self.arr_rounds = ["Rounds", str(self.rounds1), str(self.rounds2)]
                     data_rounds = ",".join(self.arr_rounds)
                     self.parent.parent.client_socket.send(data_rounds.encode())
+                    data_RC12 = self.parent.parent.client_socket.recv(1024).decode()
+                    arr_RC12 = data_RC12.split(",")
                     self.ent_guess.delete(0, END)
                     self.roundLBL.set(str(i+1) + " / " + str(toprounds))
+                    self.roundLBL2.set(str(arr_RC12[0]) + " / " + str(toprounds))
                     self.guessLBL.set("guess the word:")
                     self.UploadImg()
                     while self.guessLBL.get() != "correct":
