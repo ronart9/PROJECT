@@ -130,9 +130,15 @@ class Game(tkinter.Toplevel):
             self.lab_rounds = Label(self, textvariable=self.roundLBL, fg='#000000', bg='#ee890c',
                                     font=('Helvetica bold', 25))
             self.lab_rounds.place(x=75, y=190)
+            self.rounds = 0
             trues = True
             while trues:
                 for i in range(toprounds):
+                    print(i)
+                    self.rounds += 1
+                    self.arr_rounds = ["Rounds", str(self.rounds)]
+                    data_rounds = ",".join(self.arr_rounds)
+                    self.parent.parent.client_socket.send(data_rounds.encode())
                     self.ent_guess.delete(0, END)
                     self.roundLBL.set(str(i+1) + " / " + str(toprounds))
                     self.guessLBL.set("guess the word:")

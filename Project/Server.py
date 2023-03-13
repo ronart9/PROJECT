@@ -14,6 +14,7 @@ class Server(object):
         self.userDb = UserDB()
         self.players = []
 
+
     def start(self):
         try:
 
@@ -82,6 +83,9 @@ class Server(object):
                 elif arr and arr[0] == "LeaveLobby" and len(arr) == 2:
                     self.leaveLobby(client_socket, arr)
 
+                elif arr and arr[0] == "Rounds" and len(arr) == 2:
+                    self.Count_Rounds(client_socket, arr)
+
 
                 elif arr and arr[0] == "WinScreen" and len(arr) == 2:
                     self.Win_Screen(client_socket, arr)
@@ -144,6 +148,28 @@ class Server(object):
         socket2.send(str_data1.encode())
         print("E5")
 
+    #def get_client_id(client_list, client_socket):
+        #for client_id, sock in client_list.items():
+            #if sock == client_socket:
+                #return client_id
+        #return None
+
+    def Count_Rounds(self, client_socket, arr):
+        rounds = {}  # dictionary that maps client IDs to round numbers
+        while True:
+            player1 = self.players[0]
+            player2 = self.players[1]
+            socket1 = player1.client_socket
+            socket2 = player2.client_socket
+            #client_id = get_client_id(client_address)  # helper function that returns a unique ID for each client
+            round_number = int(arr[1])
+            rounds[socket1] = round_number
+            # send the round number to the other client
+            #other_client_id = get_other_client_id(client_id)  # helper function that returns the ID of the other client
+            #other_client_address = get_client_address(other_client_id)  # helper function that returns the address of the other client
+            #response = "ROUND " + str(rounds[other_client_id])
+            response = ["Round", ]
+            client_socket.sendto(response.encode(), other_client_address)
 
 
 
