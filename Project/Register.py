@@ -82,6 +82,11 @@ class Register(tkinter.Toplevel):
                 print(str_insert)
                 self.parent.client_socket.send(str_insert.encode())
                 data = self.parent.client_socket.recv(1024).decode()
+                if data == "success register":
+                    messagebox.showinfo("show info", "success register")
+                    self.close()
+                else:
+                    messagebox.showerror("error", "error")
                 print(data)
             else:
                 print("username is incorrect")
