@@ -24,6 +24,8 @@ class Game(tkinter.Toplevel):
         self.resizable(width=False, height=False)
         self.title('Game Screen')
         self.userDb = UserDB()
+        self.flag = False
+        self.RunningGame = True
 
         self.arrImg = [["tree", "../Project/images/tree.png"],
                        ["ghost", "../Project/images/ghost.png"] ,
@@ -55,7 +57,7 @@ class Game(tkinter.Toplevel):
         self.lab_stats.place(x=75, y=140)
         # ----------------------------------------------------------------------------------------------
         self.lab_round = Label(self, text='rounds', font=('Helvetica bold', 15), bg='#ee890c')
-        self.lab_round.place(x=80, y=225)
+        self.lab_round.place(x=80, y=240)
         # ----------------------------------------------------------------------------------------------
         self.ent_guess = Entry(self, font=50)
         self.ent_guess.place(x=430, y=450)
@@ -75,6 +77,7 @@ class Game(tkinter.Toplevel):
         self.lab_capitals.place(x=430, y=480)
         # ----------------------------------------------------------------------------------------------
         self.handle_thread_gamef()
+
 
     #def button_pressed(self):
         #self.btn_guess.invoke()
@@ -122,13 +125,33 @@ class Game(tkinter.Toplevel):
         client_handler.daemon = True
         client_handler.start()
 
+    def handle_thread_rounds(self):
+        self.client_round = threading.Thread(target=self.recv_rounds, args=())
+        self.client_round.daemon = True
+        self.client_round.start()
+
+    def recv_rounds(self):
+        while True:
+            if self.flag:
+                return
+            data_RC12 = self.parent.parent.client_socket.recv(1024).decode()
+            arr_RC12 = data_RC12.split(",")
+            print(arr_RC12)
+            if arr_RC12[1] == 'This_Round':
+                self.roundLBL2.set(str(arr_RC12[0]) + " / 10")
+            elif arr_RC12[1] == 'CloseWindowGame':
+                self.RunningGame = False
+
     def GameF(self):
         try:
+
+            self.username = self.parent.parent.username
             self.roundLBL = StringVar()
             self.roundLBL2 = StringVar()
             toprounds = 10
             self.roundLBL.set("1 / " + str(toprounds))
             self.roundLBL2.set("1 / " + str(toprounds))
+            self.handle_thread_rounds()
             self.lab_rounds = Label(self, textvariable=self.roundLBL, fg='#000000', bg='#ee890c',
                                     font=('Helvetica bold', 25))
             self.lab2_rounds = Label(self, textvariable=self.roundLBL2, fg='#000000', bg='#ee890c',
@@ -137,24 +160,24 @@ class Game(tkinter.Toplevel):
             self.lab2_rounds.place(x=75, y=450)
             self.rounds1 = 0
             self.rounds2 = 0
-            trues = True
-            while trues:
+
+            while self.RunningGame:
                 for i in range(toprounds):
+
                     print(i)
                     self.rounds1 += 1
-                    self.rounds2 += 1
-                    self.arr_rounds = ["Rounds", str(self.rounds1), str(self.rounds2)]
+                    #self.rounds2 += 1
+                    self.arr_rounds = ["Rounds", str(self.username), str(self.rounds1)]
                     data_rounds = ",".join(self.arr_rounds)
                     self.parent.parent.client_socket.send(data_rounds.encode())
-                    data_RC12 = self.parent.parent.client_socket.recv(1024).decode()
-                    arr_RC12 = data_RC12.split(",")
+
                     self.ent_guess.delete(0, END)
                     self.roundLBL.set(str(i+1) + " / " + str(toprounds))
-                    self.roundLBL2.set(str(arr_RC12[0]) + " / " + str(toprounds))
                     self.guessLBL.set("guess the word:")
                     self.UploadImg()
                     while self.guessLBL.get() != "correct":
                         self.update()
+                self.flag = True
                 self.guessLBL.set("YOU WON !!")
                 self.ent_guess.delete(0, END)
                 self.ent_guess.config(state="disabled")
@@ -162,20 +185,13 @@ class Game(tkinter.Toplevel):
                 username = self.parent.username
                 arr = ["WinScreen", username]
                 data = ",".join(arr)
-                print("1 -")
+
                 self.parent.parent.client_socket.send(data.encode())
-                print("2 -")
-                data1 = self.parent.parent.client_socket.recv(1024).decode()
-                print("3 -")
-                arr1 = data1.split(",")
-                print("4 -")
-                if arr1[1] == "CloseWindowGame":
-                    print("5 -")
-                    trues = False
+
                 #for n in range(len(self.arr2)):
                     #self.arrImg.append(self.arr2[n])
                     #self.arr2.remove(self.arr2[n])
-            print("6 -")
+
             self.OpenWinScreen()
 
         except:

@@ -25,7 +25,7 @@ class Lobby(tkinter.Toplevel):
 
         self.create_gui()
 
-        self.waiting_list = ["me"]
+        #self.waiting_list = ["me"]
 
 
 
@@ -76,7 +76,7 @@ class Lobby(tkinter.Toplevel):
         self.list.place(x= 65, y= 92)
 
         self.handle_waiting_for_player()
-        self.handle_waiting_for_message()
+        #self.handle_waiting_for_message()
 
 
 

@@ -84,7 +84,11 @@ class Server(object):
                     self.leaveLobby(client_socket, arr)
 
                 elif arr and arr[0] == "Rounds" and len(arr) == 3:
-                    self.Count_Rounds(client_socket, arr)
+                    if(arr[1] == self.players[0].name):
+                        self.Count_Rounds1(client_socket, arr)
+                    elif (arr[1] == self.players[1].name):
+                        self.Count_Rounds2(client_socket, arr)
+
 
 
                 elif arr and arr[0] == "WinScreen" and len(arr) == 2:
@@ -154,19 +158,20 @@ class Server(object):
                 #return client_id
         #return None
 
-    def Count_Rounds(self, client_socket, arr):
+    def Count_Rounds1(self, client_socket, arr):
         player1 = self.players[0]
         player2 = self.players[1]
         socket1 = player1.client_socket
         socket2 = player2.client_socket
-        data1 = [arr[1], "This_Round"]
-        data2 = [arr[2], "This_Round"]
+
+        data = [arr[2], "This_Round"]
+        #data2 = [arr[2], "This_Round"]
         print("R1")
-        str_data1 = ",".join(data1)
+        str_data1 = ",".join(data)
         print("R2")
-        str_data2 = ",".join(data2)
+        #str_data2 = ",".join(data2)
         print("R3")
-        socket1.send(str_data2.encode())
+        #socket1.send(str_data2.encode())
         print("R4")
         socket2.send(str_data1.encode())
         print("R5")
@@ -185,6 +190,24 @@ class Server(object):
             #response = "ROUND " + str(rounds[other_client_id])
             #response = ["Round", ]
             #client_socket.sendto(response.encode(), other_client_address)
+
+    def Count_Rounds2(self, client_socket, arr):
+        player1 = self.players[0]
+        player2 = self.players[1]
+        socket1 = player1.client_socket
+        socket2 = player2.client_socket
+
+        data = [arr[2], "This_Round"]
+        #data2 = [arr[2], "This_Round"]
+        print("R1")
+        str_data1 = ",".join(data)
+        print("R2")
+        #str_data2 = ",".join(data2)
+        print("R3")
+        #socket1.send(str_data2.encode())
+        print("R4")
+        socket1.send(str_data1.encode())
+        print("R5")
 
 
 
