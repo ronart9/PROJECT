@@ -106,6 +106,7 @@ class Server(object):
                 not_crash = False
                 break
 
+
     def Create_Lobby(self, client_socket, arr):
         player = Player(client_socket, arr[1])
         self.players.append(player)
@@ -125,6 +126,7 @@ class Server(object):
             socket1.send(str_data2.encode())
             socket2.send(str_data1.encode())
 
+
     def leaveLobby(self, client_socket, arr):
         while True:
             print(arr[1])
@@ -135,6 +137,7 @@ class Server(object):
                 self.players.remove(self.players[1])
                 self.players[0].send("playerleave".encode())
 
+
     def Win_Screen(self, client_socket, arr):
         player1 = self.players[0]
         player2 = self.players[1]
@@ -142,72 +145,30 @@ class Server(object):
         socket2 = player2.client_socket
         data1 = [player1.name, "CloseWindowGame"]
         data2 = [player2.name, "CloseWindowGame"]
-        print("E1")
         str_data1 = ",".join(data1)
-        print("E2")
         str_data2 = ",".join(data2)
-        print("E3")
         socket1.send(str_data2.encode())
-        print("E4")
         socket2.send(str_data1.encode())
-        print("E5")
 
-    #def get_client_id(client_list, client_socket):
-        #for client_id, sock in client_list.items():
-            #if sock == client_socket:
-                #return client_id
-        #return None
 
     def Count_Rounds1(self, client_socket, arr):
-        player1 = self.players[0]
+        #player1 = self.players[0]
         player2 = self.players[1]
-        socket1 = player1.client_socket
+        #socket1 = player1.client_socket
         socket2 = player2.client_socket
-
         data = [arr[2], "This_Round"]
-        #data2 = [arr[2], "This_Round"]
-        print("R1")
         str_data1 = ",".join(data)
-        print("R2")
-        #str_data2 = ",".join(data2)
-        print("R3")
-        #socket1.send(str_data2.encode())
-        print("R4")
         socket2.send(str_data1.encode())
-        print("R5")
-        # rounds = {}
-        #while True:
-            #player1 = self.players[0]
-            #player2 = self.players[1]
-            #socket1 = player1.client_socket
-            #socket2 = player2.client_socket
-            #client_id = get_client_id(client_address)  # helper function that returns a unique ID for each client
-            #round_number = int(arr[1])
-            #rounds[socket1] = round_number
-            # send the round number to the other client
-            #other_client_id = get_other_client_id(client_id)  # helper function that returns the ID of the other client
-            #other_client_address = get_client_address(other_client_id)  # helper function that returns the address of the other client
-            #response = "ROUND " + str(rounds[other_client_id])
-            #response = ["Round", ]
-            #client_socket.sendto(response.encode(), other_client_address)
+
 
     def Count_Rounds2(self, client_socket, arr):
         player1 = self.players[0]
-        player2 = self.players[1]
+        #player2 = self.players[1]
         socket1 = player1.client_socket
-        socket2 = player2.client_socket
-
+        #socket2 = player2.client_socket
         data = [arr[2], "This_Round"]
-        #data2 = [arr[2], "This_Round"]
-        print("R1")
         str_data1 = ",".join(data)
-        print("R2")
-        #str_data2 = ",".join(data2)
-        print("R3")
-        #socket1.send(str_data2.encode())
-        print("R4")
         socket1.send(str_data1.encode())
-        print("R5")
 
 
 

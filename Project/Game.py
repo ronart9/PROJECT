@@ -164,7 +164,7 @@ class Game(tkinter.Toplevel):
             while self.RunningGame:
                 for i in range(toprounds):
 
-                    print(i)
+                    #print(i)
                     self.rounds1 += 1
                     #self.rounds2 += 1
                     self.arr_rounds = ["Rounds", str(self.username), str(self.rounds1)]
