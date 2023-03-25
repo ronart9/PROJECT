@@ -50,20 +50,22 @@ class Game(tkinter.Toplevel):
     def create_gui(self):
         self.configure(bg='#ffb838')  # -using color HEX
         # ----------------------------------------------------------------------------------------------
-        self.bg_P2stats = Canvas(self, width=180, height=325, bg='#ee890c', highlightthickness=0)
+        self.bg_P2stats = Canvas(self, width=180, height=280, bg='#ee890c', highlightthickness=0)
         self.bg_P2stats.place(x=50, y=100)
         # ----------------------------------------------------------------------------------------------
         self.lab_stats = Label(self, text='STATS', font=('Helvetica bold', 25), bg='#ee890c')
         self.lab_stats.place(x=75, y=115)
         # ----------------------------------------------------------------------------------------------
         self.lab_round1 = Label(self, text='rounds', font=('Helvetica bold', 15), bg='#ee890c')
-        self.lab_round1.place(x=150, y=170)
+        self.lab_round1.place(x=150, y=210)
+        # ----------------------------------------------------------------------------------------------
+
         # ----------------------------------------------------------------------------------------------
         self.lab_line = Label(self, text='----------------------', font=('Helvetica bold', 15), bg='#ee890c')
         self.lab_line.place(x=60, y=240)
         # ----------------------------------------------------------------------------------------------
         self.lab_round2 = Label(self, text='rounds', font=('Helvetica bold', 15), bg='#ee890c')
-        self.lab_round2.place(x=150, y=285)
+        self.lab_round2.place(x=150, y=325)
         # ----------------------------------------------------------------------------------------------
         self.ent_guess = Entry(self, font=50)
         self.ent_guess.place(x=430, y=450)
@@ -71,8 +73,6 @@ class Game(tkinter.Toplevel):
         self.btn_guess = Button(self, text='GUESS',command= self.Guess_img , font=30, background="#b7f061")
         self.bind("<Return>", lambda event: self.btn_guess.invoke())
         self.btn_guess.place(x=500, y=500)
-        # ----------------------------------------------------------------------------------------------
-        #self.UploadImg()
         # ----------------------------------------------------------------------------------------------
         self.guessLBL = StringVar()
         self.guessLBL.set("guess the word:")
@@ -151,6 +151,17 @@ class Game(tkinter.Toplevel):
     def GameF(self):
         try:
             self.username = self.parent.parent.username
+            self.U2 = ["UserNameP2", str(self.username)]
+            self.data_U2 = ",".join(self.U2)
+            self.parent.parent.client_socket.send(self.data_U2.encode())
+            self.data_nameP2 = self.parent.parent.client_socket.recv(1024).decode()
+            self.arr_nameP2 = self.data_nameP2.split(",")
+            self.nameP2 = self.arr_nameP2[0]
+            self.lab_nameP1 = Label(self, text=str(self.username), font=('Helvetica bold', 25), bg='#ee890c')
+            self.lab_nameP1.place(x=80, y=160)
+            self.lab_nameP2 = Label(self, text=str(self.nameP2), font=('Helvetica bold', 25), bg='#ee890c')
+            self.lab_nameP2.place(x=80, y=275)
+
             self.roundLBL = StringVar()
             self.roundLBL2 = StringVar()
             toprounds = 10
@@ -161,8 +172,8 @@ class Game(tkinter.Toplevel):
                                     font=('Helvetica bold', 25))
             self.lab2_rounds = Label(self, textvariable=self.roundLBL2, fg='#000000', bg='#ee890c',
                                     font=('Helvetica bold', 25))
-            self.lab_rounds.place(x=60, y=165)
-            self.lab2_rounds.place(x=60, y=280)
+            self.lab_rounds.place(x=60, y=205)
+            self.lab2_rounds.place(x=60, y=320)
             self.rounds1 = 0
             self.rounds2 = 0
 

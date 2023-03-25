@@ -83,6 +83,12 @@ class Server(object):
                 elif arr and arr[0] == "LeaveLobby" and len(arr) == 2:
                     self.leaveLobby(client_socket, arr)
 
+                elif arr and arr[0] == "UserNameP2" and len(arr) == 2:
+                    if (arr[1] == self.players[0].name):
+                        self.SendPlayerName1(client_socket, arr)
+                    elif (arr[1] == self.players[1].name):
+                        self.SendPlayerName2(client_socket, arr)
+
                 elif arr and arr[0] == "Rounds" and len(arr) == 3:
                     if(arr[1] == self.players[0].name):
                         self.Count_Rounds1(client_socket, arr)
@@ -137,6 +143,20 @@ class Server(object):
                 self.players.remove(self.players[1])
                 self.players[0].send("playerleave".encode())
 
+    def SendPlayerName1(self, client_socket, arr):
+        player2 = self.players[1]
+        socket2 = player2.client_socket
+        dataname2 = [str(self.players[0].name), "DataName"]
+        str_dataname2 = ",".join(dataname2)
+        socket2.send(str_dataname2.encode())
+
+    def SendPlayerName2(self, client_socket, arr):
+        player1 = self.players[0]
+        socket1 = player1.client_socket
+        dataname1 = [str(self.players[1].name), "DataName"]
+        str_dataname1 = ",".join(dataname1)
+        socket1.send(str_dataname1.encode())
+
 
     def Win_Screen(self, client_socket, arr):
         player1 = self.players[0]
@@ -152,9 +172,7 @@ class Server(object):
 
 
     def Count_Rounds1(self, client_socket, arr):
-        #player1 = self.players[0]
         player2 = self.players[1]
-        #socket1 = player1.client_socket
         socket2 = player2.client_socket
         data = [arr[2], "This_Round"]
         str_data1 = ",".join(data)
@@ -163,9 +181,7 @@ class Server(object):
 
     def Count_Rounds2(self, client_socket, arr):
         player1 = self.players[0]
-        #player2 = self.players[1]
         socket1 = player1.client_socket
-        #socket2 = player2.client_socket
         data = [arr[2], "This_Round"]
         str_data1 = ",".join(data)
         socket1.send(str_data1.encode())
