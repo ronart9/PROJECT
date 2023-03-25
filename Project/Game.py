@@ -50,22 +50,20 @@ class Game(tkinter.Toplevel):
     def create_gui(self):
         self.configure(bg='#ffb838')  # -using color HEX
         # ----------------------------------------------------------------------------------------------
-        self.bg_P2stats = Canvas(self, width=180, height=280, bg='#ee890c', highlightthickness=0)
+        self.bg_P2stats = Canvas(self, width=200, height=290, bg='#ee890c', highlightthickness=0)
         self.bg_P2stats.place(x=50, y=100)
         # ----------------------------------------------------------------------------------------------
         self.lab_stats = Label(self, text='STATS', font=('Helvetica bold', 25), bg='#ee890c')
         self.lab_stats.place(x=75, y=115)
         # ----------------------------------------------------------------------------------------------
         self.lab_round1 = Label(self, text='rounds', font=('Helvetica bold', 15), bg='#ee890c')
-        self.lab_round1.place(x=150, y=210)
+        self.lab_round1.place(x=170, y=210)
         # ----------------------------------------------------------------------------------------------
-
-        # ----------------------------------------------------------------------------------------------
-        self.lab_line = Label(self, text='----------------------', font=('Helvetica bold', 15), bg='#ee890c')
+        self.lab_line = Label(self, text='-------------------------', font=('Helvetica bold', 15), bg='#ee890c')
         self.lab_line.place(x=60, y=240)
         # ----------------------------------------------------------------------------------------------
         self.lab_round2 = Label(self, text='rounds', font=('Helvetica bold', 15), bg='#ee890c')
-        self.lab_round2.place(x=150, y=325)
+        self.lab_round2.place(x=170, y=325)
         # ----------------------------------------------------------------------------------------------
         self.ent_guess = Entry(self, font=50)
         self.ent_guess.place(x=430, y=450)
@@ -157,9 +155,11 @@ class Game(tkinter.Toplevel):
             self.data_nameP2 = self.parent.parent.client_socket.recv(1024).decode()
             self.arr_nameP2 = self.data_nameP2.split(",")
             self.nameP2 = self.arr_nameP2[0]
-            self.lab_nameP1 = Label(self, text=str(self.username), font=('Helvetica bold', 25), bg='#ee890c')
+            self.lab_nameP1 = Label(self, text=str(self.username), font=('Helvetica bold', 25),
+                                    bg='#ee890c', fg = '#4c9e18')
             self.lab_nameP1.place(x=80, y=160)
-            self.lab_nameP2 = Label(self, text=str(self.nameP2), font=('Helvetica bold', 25), bg='#ee890c')
+            self.lab_nameP2 = Label(self, text=str(self.nameP2), font=('Helvetica bold', 25),
+                                    bg='#ee890c', fg = '#e80000')
             self.lab_nameP2.place(x=80, y=275)
 
             self.roundLBL = StringVar()
@@ -179,10 +179,7 @@ class Game(tkinter.Toplevel):
 
             while self.RunningGame:
                 for i in range(toprounds):
-
-                    #print(i)
                     self.rounds1 += 1
-                    #self.rounds2 += 1
                     self.arr_rounds = ["Rounds", str(self.username), str(self.rounds1)]
                     data_rounds = ",".join(self.arr_rounds)
                     self.parent.parent.client_socket.send(data_rounds.encode())
