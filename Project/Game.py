@@ -134,6 +134,11 @@ class Game(tkinter.Toplevel):
         self.client_round.daemon = True
         self.client_round.start()
 
+    def handle_thread_WinSc(self):
+        self.client_round = threading.Thread(target=self.recv_WinSc, args=())
+        self.client_round.daemon = True
+        self.client_round.start()
+
     def recv_rounds(self):
         while True:
             if self.flag:
@@ -144,7 +149,17 @@ class Game(tkinter.Toplevel):
             if arr_RC12[1] == 'This_Round':
                 self.roundLBL2.set(str(arr_RC12[0]) + " / 10")
             elif arr_RC12[1] == 'CloseWindowGame':
-                self.RunningGame = False
+                self.OpenWinScreen()
+
+    def recv_WinSc(self):
+        while True:
+            data_WS = self.parent.parent.client_socket.recv(1024).decode()
+            arr_WS = data_WS.split(",")
+            print(arr_WS)
+            print("recvWinSC")
+            if arr_WS[1] == "CloseWindowGame":
+                self.OpenWinScreen()
+
 
     def GameF(self):
         try:
@@ -179,6 +194,7 @@ class Game(tkinter.Toplevel):
 
             while self.RunningGame:
                 for i in range(toprounds):
+                    #self.handle_thread_WinSc()
                     self.rounds1 += 1
                     self.arr_rounds = ["Rounds", str(self.username), str(self.rounds1)]
                     data_rounds = ",".join(self.arr_rounds)
@@ -200,12 +216,13 @@ class Game(tkinter.Toplevel):
                 data = ",".join(arr)
 
                 self.parent.parent.client_socket.send(data.encode())
+                #self.handle_thread_WinSc()
 
                 #for n in range(len(self.arr2)):
                     #self.arrImg.append(self.arr2[n])
                     #self.arr2.remove(self.arr2[n])
 
-            self.OpenWinScreen()
+
 
         except:
             print("error - GameF")

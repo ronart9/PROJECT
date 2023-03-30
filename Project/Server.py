@@ -98,7 +98,9 @@ class Server(object):
 
 
                 elif arr and arr[0] == "WinScreen" and len(arr) == 2:
-                    self.Win_Screen(client_socket, arr)
+                    if (arr[1] == self.players[0].name or arr[1] == self.players[1].name):
+                        self.Win_Screen1(client_socket, arr)
+                        self.Win_Screen2(client_socket, arr)
 
                 elif arr != None and arr[0] == "get_all_users" and len(arr) == 1:
                     print("get_all_users")
@@ -158,17 +160,20 @@ class Server(object):
         socket1.send(str_dataname1.encode())
 
 
-    def Win_Screen(self, client_socket, arr):
-        player1 = self.players[0]
+    def Win_Screen1(self, client_socket, arr):
+        # "CloseWindowGame"
         player2 = self.players[1]
-        socket1 = player1.client_socket
         socket2 = player2.client_socket
-        data1 = [player1.name, "CloseWindowGame"]
-        data2 = [player2.name, "CloseWindowGame"]
-        str_data1 = ",".join(data1)
-        str_data2 = ",".join(data2)
-        socket1.send(str_data2.encode())
-        socket2.send(str_data1.encode())
+        dataname2 = [str(self.players[0].name), "CloseWindowGame"]
+        str_dataname2 = ",".join(dataname2)
+        socket2.send(str_dataname2.encode())
+
+    def Win_Screen2(self, client_socket, arr):
+        player1 = self.players[0]
+        socket1 = player1.client_socket
+        dataname1 = [str(self.players[1].name), "CloseWindowGame"]
+        str_dataname1 = ",".join(dataname1)
+        socket1.send(str_dataname1.encode())
 
 
     def Count_Rounds1(self, client_socket, arr):
