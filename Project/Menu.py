@@ -29,6 +29,7 @@ class Menu_Screen(tkinter.Tk):
         self.resizable(width=False, height=False)
         self.title('Main Window')
         self.username = ""
+        self.wm_iconbitmap('sketchbook.ico')
 
         self.create_gui()
 
@@ -113,7 +114,7 @@ class Menu_Screen(tkinter.Tk):
         self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.client_socket.connect(('127.0.0.1', 1802))
         data = self.client_socket.recv(1024).decode()
-        print("data" + data)
+        print("data " + data)
         print("hi", self.client_socket)
 
     def log_in(self):

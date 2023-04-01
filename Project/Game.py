@@ -146,10 +146,11 @@ class Game(tkinter.Toplevel):
             data_RC12 = self.parent.parent.client_socket.recv(1024).decode()
             arr_RC12 = data_RC12.split(",")
             print(arr_RC12)
-            if arr_RC12[1] == 'This_Round':
-                self.roundLBL2.set(str(arr_RC12[0]) + " / 10")
-            elif arr_RC12[1] == 'CloseWindowGame':
+            if arr_RC12[1] == 'CloseWindowGame':
                 self.OpenWinScreen()
+            elif arr_RC12[1] == 'This_Round':
+                self.roundLBL2.set(str(arr_RC12[0]) + " / 10")
+
 
     def recv_WinSc(self):
         while True:
@@ -170,6 +171,8 @@ class Game(tkinter.Toplevel):
             self.data_nameP2 = self.parent.parent.client_socket.recv(1024).decode()
             self.arr_nameP2 = self.data_nameP2.split(",")
             self.nameP2 = self.arr_nameP2[0]
+            print("hello im P1 "+ str(self.username))
+            print("hello im P2: "+ str(self.nameP2))
             self.lab_nameP1 = Label(self, text=str(self.username), font=('Helvetica bold', 25),
                                     bg='#ee890c', fg = '#4c9e18')
             self.lab_nameP1.place(x=80, y=160)
@@ -191,7 +194,6 @@ class Game(tkinter.Toplevel):
             self.lab2_rounds.place(x=60, y=320)
             self.rounds1 = 0
             self.rounds2 = 0
-
             while self.RunningGame:
                 for i in range(toprounds):
                     #self.handle_thread_WinSc()
