@@ -28,15 +28,15 @@ class Winner(tkinter.Toplevel):
         # ----------------------------------------------------------------------------------------------
         self.WinnerLBL = StringVar()
         self.WinnerLBL.set("")
-        self.lab_Winner = Label(self, textvariable=self.WinnerLBL, fg='#4de100', bg='#00a8f3',
-                                font=('Helvetica bold', 16))
-        self.lab_Winner.place(x=230, y=200)
+
         # ----------------------------------------------------------------------------------------------
         self.LoserLBL = StringVar()
         self.LoserLBL.set("")
-        self.lab_Loser = Label(self, textvariable=self.LoserLBL, fg='#ee0000', bg='#00a8f3',
-                                font=('Helvetica bold', 16))
-        self.lab_Loser.place(x=410, y=250)
+
+        # ----------------------------------------------------------------------------------------------
+        self.btn_close = Button(self, text='Close', command=self.close, font=('Helvetica bold', 12),
+                                background="#ea1111")
+        self.btn_close.place(x=600, y=50)
         # ----------------------------------------------------------------------------------------------
         self.handle_thread_GetWL()
 
@@ -54,8 +54,6 @@ class Winner(tkinter.Toplevel):
             self.arr_WL = self.data_WL.split(",")
             print("WWWWWWWWWWWWWWW")
             print(self.arr_WL)
-            self.WinnerLBL.set(str(self.arr_WL[0]))
-            self.LoserLBL.set(str(self.arr_WL[1]))
             if self.arr_WL[0] == self.username:
                 self.Won = "img_6.png"
                 self.Wonimg = Image.open(self.Won)
@@ -63,6 +61,14 @@ class Winner(tkinter.Toplevel):
                 self.WonL = ImageTk.PhotoImage(self.resizebleW)
                 self.lbl_logoWon = Label(self, image=self.WonL, bg='#00a8f3')
                 self.lbl_logoWon.place(x=195, y=30)
+                # ----------------------------------
+                self.lab_Winner = Label(self, textvariable=self.WinnerLBL, fg='#4de100', bg='#00a8f3',
+                                        font=('Comic Sans MS', 16))
+                self.lab_Winner.place(x=240, y=205)
+                # ----------------------------------
+                self.lab_Loser = Label(self, textvariable=self.LoserLBL, fg='#ee0000', bg='#00a8f3',
+                                       font=('Comic Sans MS', 16))
+                self.lab_Loser.place(x=400, y=240)
             elif self.arr_WL[1] == self.username:
                 self.Lost = "img_7.png"
                 self.Lostimg = Image.open(self.Lost)
@@ -70,9 +76,26 @@ class Winner(tkinter.Toplevel):
                 self.LostL = ImageTk.PhotoImage(self.resizebleL)
                 self.lbl_logoLost = Label(self, image=self.LostL, bg='#00a8f3')
                 self.lbl_logoLost.place(x=195, y=30)
+                # ----------------------------------
+                self.lab_Winner = Label(self, textvariable=self.WinnerLBL, fg='#ee0000', bg='#00a8f3',
+                                        font=('Comic Sans MS', 16))
+                self.lab_Winner.place(x=240, y=205)
+                # ----------------------------------
+                self.lab_Loser = Label(self, textvariable=self.LoserLBL, fg='#4de100', bg='#00a8f3',
+                                       font=('Comic Sans MS', 16))
+                self.lab_Loser.place(x=400, y=240)
+
+
+            self.WinnerLBL.set(str(self.arr_WL[0]))
+            self.LoserLBL.set(str(self.arr_WL[1]))
 
 
         except:
             print("error")
+
+
+    def close(self):
+        self.parent.parent.parent.deiconify() #show parent
+        self.destroy()# close and destroy this screen
 
 
