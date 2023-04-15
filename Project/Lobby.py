@@ -7,6 +7,8 @@ from tkinter import ttk, messagebox
 from PIL import ImageTk, Image
 from UserDB import *
 from Game import Game
+import random
+from MiniGame import MiniGame
 
 
 #https://www.pythontutorial.net/tkinter/tkinter-toplevel/
@@ -48,6 +50,7 @@ class Lobby(tkinter.Toplevel):
         self.lbl_LobbyImg = Label(self, image=self.LobbyImg, bg='#909090')
         self.lbl_LobbyImg.place(x=25, y=60)
         # ----------------------------------------------------------------------------------------------
+
         self.logoTi = "TimerSetLogo.png"
         self.logoimgTi = Image.open(self.logoTi)
         self.resizebleTi = self.logoimgTi.resize((220, 160), Image.Resampling.LANCZOS)
@@ -75,7 +78,11 @@ class Lobby(tkinter.Toplevel):
         self.list.insert(1, self.username)
         self.list.place(x= 65, y= 92)
 
+        self.btn_guessMG = Button(self, text='MiniGame', command=self.play_minigame, font=20, background="#b7f061")
+        self.btn_guessMG.place(x=310, y=240)
+
         self.handle_waiting_for_player()
+        #self.play_minigame()
         #self.handle_waiting_for_message()
 
 
@@ -97,6 +104,7 @@ class Lobby(tkinter.Toplevel):
         self.Client_handler.start()
 
     def waiting_for_player(self):
+
         #email = self.parent.ent_email.get()
         #password = self.parent.ent_password.get()
         username = self.parent.username
@@ -118,6 +126,26 @@ class Lobby(tkinter.Toplevel):
             #self.num2set= 1
             self.list.insert(2, arr[0]+ f" [player {self.num}]")
             self.Animation_Ent_Lobby()
+
+
+    def play_minigame(self):
+        window = MiniGame(self)
+        # window.grab_set()
+        # self.withdraw()
+    #     #number_of_plays = 5
+    #     #self.running = True
+    #     #self.number = random.randint(1, 100)
+    #     #guess = None
+    #     #self.tries = 0
+    #     self.guess = self.ent_guess.get()
+    # #def play_minigame2(self):
+    #     while self.guess != self.number:
+    #         self.tries += 1
+    #         if self.guess > self.number:
+    #             self.MGstr.set("Too high, try again")
+    #         elif self.guess < self.number:
+    #             self.MGstr.set("Too low, try again")
+    #     self.MGstr.set("You've got it in " + str(self.tries) + " tries!")
 
     def waiting_for_message(self):
         data = self.parent.client_socket.recv(1024).decode()

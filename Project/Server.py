@@ -116,6 +116,16 @@ class Server(object):
                     str_winner_loser = ",".join(arr_winner_loser)
                     client_socket.send(str_winner_loser.encode())
 
+                elif arr and arr[0] == "LeaveWinScreen" and len(arr)== 2:
+                    if arr[1] == self.players[0].name:
+                        self.players.remove(self.players[0])
+                        print("W----W")
+                        print(self.players)
+                    elif arr[1] == self.players[1].name:
+                        self.players.remove(self.players[1])
+                        print("M----M")
+                        print(self.players)
+
 
                 elif arr != None and arr[0] == "get_all_users" and len(arr) == 1:
                     print("get_all_users")

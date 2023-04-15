@@ -95,6 +95,9 @@ class Winner(tkinter.Toplevel):
 
 
     def close(self):
+        message = ["LeaveWinScreen", self.username]
+        data = ",".join(message)
+        self.parent.parent.parent.client_socket.send(data.encode())
         self.parent.parent.parent.deiconify() #show parent
         self.destroy()# close and destroy this screen
 
