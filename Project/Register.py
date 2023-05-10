@@ -85,11 +85,12 @@ class Register(tkinter.Toplevel):
                 if data == "success register":
                     messagebox.showinfo("show info", "success register")
                     self.close()
-                else:
+                elif data == "failed register":
                     messagebox.showerror("error", "error")
                 print(data)
             else:
                 print("username is incorrect")
+                messagebox.showerror("error", "error in username")
         except:
             print("could not register")
 

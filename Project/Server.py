@@ -59,9 +59,9 @@ class Server(object):
                     print(arr)
                     IsExist = self.userDb.insert_user(arr[1], arr[2], arr[3])
                     print("server data:", IsExist)
-                    if IsExist:
+                    if IsExist == True:
                         client_socket.send("success register".encode())
-                    elif IsExist:
+                    elif IsExist == False:
                         client_socket.send("failed register".encode())
                 elif arr and arr[0] == "login" and len(arr) == 3:
                     print(arr)
