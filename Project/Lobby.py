@@ -24,7 +24,6 @@ class Lobby(tkinter.Toplevel):
         self.resizable(width=False, height=False)
         self.title('Waiting Lobby')
         self.userDb = UserDB()
-
         self.create_gui()
 
         #self.waiting_list = ["me"]
@@ -110,21 +109,24 @@ class Lobby(tkinter.Toplevel):
         username = self.parent.username
         arr = ["JoinLobby", username]
         data = ",".join(arr)
-        self.parent.client_socket.send(data.encode())
-        data = self.parent.client_socket.recv(1024).decode()
-        arr = data.split(",")
-        print(arr)
+        #self.parent.client_socket.send(data.encode())
+        self.parent.send_data(data, self.parent.client_socket)
+        #data = self.parent.client_socket.recv(1024).decode()
+        data1 = self.parent.recv_data(self.parent.client_socket)
+        arr1 = data1.split(",")
+        print(arr1)
         self.num = 2
-        if(arr[1] == "wait"):
-            data = self.parent.client_socket.recv(1024).decode()
-            data = data.split(",")
+        if(arr1[1] == "wait"):
+            #data = self.parent.client_socket.recv(1024).decode()
+            data2 = self.parent.recv_data(self.parent.client_socket)
+            data3 = data2.split(",")
             #self.num1set = 2
-            self.list.insert(2, data[0]+ f" [player {self.num}]")
+            self.list.insert(2, data3[0]+ f" [player {self.num}]")
             self.Animation_Ent_Lobby()
-        elif(arr[1] == "start"):
-            print(arr[0], " join us ")
+        elif(arr1[1] == "start"):
+            print(arr1[0], " join us ")
             #self.num2set= 1
-            self.list.insert(2, arr[0]+ f" [player {self.num}]")
+            self.list.insert(2, arr1[0]+ f" [player {self.num}]")
             self.Animation_Ent_Lobby()
 
 
@@ -148,7 +150,8 @@ class Lobby(tkinter.Toplevel):
     #     self.MGstr.set("You've got it in " + str(self.tries) + " tries!")
 
     def waiting_for_message(self):
-        data = self.parent.client_socket.recv(1024).decode()
+        #data = self.parent.client_socket.recv(1024).decode()
+        data = self.parent.recv_data(self.parent.client_socket)
         if data == "playerleave":
             self.Conn_Pl.set("Player left...")
             time.sleep(1)

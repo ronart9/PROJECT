@@ -23,6 +23,45 @@ class UserDB(object):
         conn.close()
     def get_table_name(self):
         return self.__tablename
+
+    def get_win(self, usarname):
+        try:
+            conn = sqlite3.connect('test.db')
+            print("Opened database successfully")
+            strsql = "SELECT * from " + self.__tablename + " where " + self.__username + "=" + "'" + str(usarname) + "'"
+            print(strsql)
+            cursor = conn.execute(strsql)
+            print(cursor)
+            row= cursor.fetchone()
+            print(row)
+            user_data = str([row[1], row[2], row[3], row[4]])
+            print("User data: " + str(user_data))
+            conn.commit()
+            conn.close()
+
+            return row[4]
+        except:
+            print("failed")
+            return False
+
+
+
+    def update_wins(self, username):
+        try:
+            conn = sqlite3.connect('test.db')
+            cur_wins = self.get_win(username)
+            updated_wins= int(cur_wins) + 1
+            print("new count wins = "+ str(updated_wins))
+            str_update= f"update {self.__tablename} set {self.__countwins} = '{updated_wins}' where {self.__username} = '{username}'"
+            print(str_update)
+            conn.execute(str_update)
+            conn.commit()
+            conn.close()
+            print("success on updating wins !")
+        except:
+            print("Failed updating wins !")
+
+
     def select_all_users(self):
         try:
             conn = sqlite3.connect('test.db')
@@ -42,11 +81,11 @@ class UserDB(object):
     def insert_user(self, email, password, username):
         try:
             conn = sqlite3.connect('test.db')
-            #salt = 'SltKey'
-            #slt_pass = hashlib.md5(salt.encode('utf-8') + password.encode('utf-8')).hexdigest()
-            #print(slt_pass)
+            salt = 'SltKey'
+            slt_pass = hashlib.md5(salt.encode('utf-8') + password.encode('utf-8')).hexdigest()
+            print(slt_pass)
             str_insert = f"INSERT INTO {self.__tablename} ({self.__email}, {self.__password}," \
-                         f"{self.__username}, {self.__countwins}) VALUES ('{email}', '{password}'," \
+                         f"{self.__username}, {self.__countwins}) VALUES ('{email}', '{slt_pass}'," \
                          f" '{username}', '{0}')"
             print(str_insert)
             conn.execute(str_insert)
@@ -76,10 +115,10 @@ class UserDB(object):
         try:
             conn = sqlite3.connect('test.db')
             print("Opened database successfully")
-            #salt= 'SltKey'
-            #slt_password= hashlib.md5(salt.encode('utf-8')+ password.encode('utf-8')).hexdigest()
-            #print(slt_password)
-            strsql = "SELECT * from " + self.__tablename + " where " + self.__email + "=" + "'" + str(email) + "'" + " and " + self.__password + "=" + "'" + password + "'"
+            salt= 'SltKey'
+            slt_password= hashlib.md5(salt.encode('utf-8')+ password.encode('utf-8')).hexdigest()
+            print(slt_password)
+            strsql = "SELECT * from " + self.__tablename + " where " + self.__email + "=" + "'" + str(email) + "'" + " and " + self.__password + "=" + "'" + slt_password + "'"
             print(strsql)
             cursor = conn.execute(strsql)
             print(cursor)

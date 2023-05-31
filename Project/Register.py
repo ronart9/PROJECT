@@ -80,8 +80,10 @@ class Register(tkinter.Toplevel):
                 arr = ["register", self.email.get(), self.password.get(), self.username.get()]
                 str_insert = ",".join(arr)
                 print(str_insert)
-                self.parent.client_socket.send(str_insert.encode())
-                data = self.parent.client_socket.recv(1024).decode()
+                #self.parent.client_socket.send(str_insert.encode())
+                self.parent.send_data(str_insert, self.parent.client_socket, "zofen")
+                #data = self.parent.client_socket.recv(1024).decode()
+                data = self.parent.recv_data(self.parent.client_socket)
                 if data == "success register":
                     messagebox.showinfo("show info", "success register")
                     self.close()
@@ -101,6 +103,7 @@ class Register(tkinter.Toplevel):
     #         return
     #     self.userdb.insert_user(self.email.get(), self.password.get(), self.firstname.get())
     def close(self):
+        self.parent.flag = False
         self.parent.deiconify() #show parent
         self.destroy()# close and destroy this screen
 

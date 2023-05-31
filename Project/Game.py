@@ -17,7 +17,7 @@ from Winner import Winner
 #should be whatever variable holds your main window
 #toplevel.title = 'Top Level'
 class Game(tkinter.Toplevel):
-    def __init__(self, parent):
+    def __init__(self, parent): #1
         super().__init__(parent)
         self.parent = parent
         self.geometry('1105x600')
@@ -26,6 +26,7 @@ class Game(tkinter.Toplevel):
         self.userDb = UserDB()
         self.flag = False
         self.RunningGame = True
+        self.god = parent.parent
 
         self.arrImg = [["tree", "../Project/images/tree.png"],
                        ["ghost", "../Project/images/ghost.png"] ,
@@ -47,7 +48,7 @@ class Game(tkinter.Toplevel):
 
         self.create_gui()
 
-    def create_gui(self):
+    def create_gui(self): #2
         self.configure(bg='#ffb838')  # -using color HEX
         # ----------------------------------------------------------------------------------------------
         self.bg_P2stats = Canvas(self, width=200, height=290, bg='#ee890c', highlightthickness=0)
@@ -143,7 +144,8 @@ class Game(tkinter.Toplevel):
         while True:
             if self.flag:
                 return
-            data_RC12 = self.parent.parent.client_socket.recv(1024).decode()
+            #data_RC12 = self.parent.parent.client_socket.recv(1024).decode()
+            data_RC12 = self.god.recv_data(self.god.client_socket)
             arr_RC12 = data_RC12.split(",")
             print(arr_RC12)
             if arr_RC12[1] == 'CloseWindowGame':
@@ -154,7 +156,8 @@ class Game(tkinter.Toplevel):
 
     def recv_WinSc(self):
         while True:
-            data_WS = self.parent.parent.client_socket.recv(1024).decode()
+            #data_WS = self.parent.parent.client_socket.recv(1024).decode()
+            data_WS = self.god.recv_data(self.god.client_socket)
             arr_WS = data_WS.split(",")
             print(arr_WS)
             print("recvWinSC")
@@ -167,8 +170,10 @@ class Game(tkinter.Toplevel):
             self.username = self.parent.parent.username
             self.U2 = ["UserNameP2", str(self.username)]
             self.data_U2 = ",".join(self.U2)
-            self.parent.parent.client_socket.send(self.data_U2.encode())
-            self.data_nameP2 = self.parent.parent.client_socket.recv(1024).decode()
+            #self.parent.parent.client_socket.send(self.data_U2.encode())
+            self.god.send_data(self.data_U2, self.god.client_socket)
+            #self.data_nameP2 = self.parent.parent.client_socket.recv(1024).decode()
+            self.data_nameP2 = self.god.recv_data(self.god.client_socket)
             self.arr_nameP2 = self.data_nameP2.split(",")
             self.nameP2 = self.arr_nameP2[0]
             print("hello im P1 "+ str(self.username))
@@ -200,7 +205,8 @@ class Game(tkinter.Toplevel):
                     self.rounds1 += 1
                     self.arr_rounds = ["Rounds", str(self.username), str(self.rounds1)]
                     data_rounds = ",".join(self.arr_rounds)
-                    self.parent.parent.client_socket.send(data_rounds.encode())
+                    #self.parent.parent.client_socket.send(data_rounds.encode())
+                    self.god.send_data(data_rounds , self.god.client_socket)
 
                     self.ent_guess.delete(0, END)
                     self.roundLBL.set(str(i+1) + " / " + str(toprounds))
@@ -217,7 +223,8 @@ class Game(tkinter.Toplevel):
                 arr = ["WinScreen", username]
                 data = ",".join(arr)
 
-                self.parent.parent.client_socket.send(data.encode())
+                #self.parent.parent.client_socket.send(data.encode())
+                self.god.send_data(data, self.god.client_socket)
                 #self.handle_thread_WinSc()
 
                 #for n in range(len(self.arr2)):
@@ -230,7 +237,7 @@ class Game(tkinter.Toplevel):
             print("error - GameF")
 
 
-    def OpenWinScreen(self):
+    def OpenWinScreen(self): #10
         window = Winner(self)
         window.grab_set()
         self.withdraw()

@@ -13,7 +13,7 @@ class Winner(tkinter.Toplevel):
         self.geometry('700x400')
         self.resizable(width=False, height=False)
         self.title('Winner Screen')
-
+        self.god = parent.parent.parent
         self.create_gui()
 
     def create_gui(self):
@@ -49,8 +49,10 @@ class Winner(tkinter.Toplevel):
     def Get_Win_lose(self):
         try:
             self.username = self.parent.parent.parent.username
-            self.parent.parent.parent.client_socket.send("Winner_Loser".encode())
-            self.data_WL = self.parent.parent.parent.client_socket.recv(1024).decode()
+            #self.parent.parent.parent.client_socket.send("Winner_Loser".encode())
+            self.god.send_data("Winner_Loser", self.god.client_socket)
+            #self.data_WL = self.parent.parent.parent.client_socket.recv(1024).decode()
+            self.data_WL = self.god.recv_data(self.god.client_socket)
             self.arr_WL = self.data_WL.split(",")
             print("WWWWWWWWWWWWWWW")
             print(self.arr_WL)
@@ -95,9 +97,11 @@ class Winner(tkinter.Toplevel):
 
 
     def close(self):
+        self.god.flag = False
         message = ["LeaveWinScreen", self.username]
         data = ",".join(message)
-        self.parent.parent.parent.client_socket.send(data.encode())
+        #self.parent.parent.parent.client_socket.send(data.encode())
+        self.god.send_data(data, self.god.client_socket)
         self.parent.parent.parent.deiconify() #show parent
         self.destroy()# close and destroy this screen
 
