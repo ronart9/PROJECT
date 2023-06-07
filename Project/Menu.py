@@ -38,6 +38,7 @@ class Menu_Screen(tkinter.Tk):
         self.username = ""
         self.wm_iconbitmap('sketchbook.ico')
         self.format = 'utf-8'
+        self.protocol("WM_DELETE_WINDOW", self.on_closing)
 
         self.create_gui()
 
@@ -239,6 +240,11 @@ class Menu_Screen(tkinter.Tk):
         except:
             print("error logging out")
 
+    def on_closing(self):
+        if messagebox.askokcancel("Quit Game", "Do you want to quit?"):
+            self.send_data("exit", self.client_socket)
+            self.destroy()
+
 
     def HideShowEye(self):
         try:
@@ -273,7 +279,6 @@ class Menu_Screen(tkinter.Tk):
             arr_wins = data_wins.split(",")
             print(arr_wins)
             if arr_wins[1] == 'GotWins':
-                print("6")
                 self.winsLBL.set(str(arr_wins[0]))
         except:
             print("error in refreshing")
