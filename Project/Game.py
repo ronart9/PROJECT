@@ -26,6 +26,7 @@ class Game(tkinter.Toplevel):
         self.userDb = UserDB()
         self.flag = False
         self.RunningGame = True
+        self.RunningRecv = True
         self.god = parent.parent
 
         self.arrImg = [["tree", "../Project/images/tree.png"],
@@ -141,14 +142,15 @@ class Game(tkinter.Toplevel):
         self.client_round.start()
 
     def recv_rounds(self):
-        while True:
+        while self.RunningRecv:
             if self.flag:
                 return
             #data_RC12 = self.parent.parent.client_socket.recv(1024).decode()
             data_RC12 = self.god.recv_data(self.god.client_socket)
             arr_RC12 = data_RC12.split(",")
             print(arr_RC12)
-            if arr_RC12[1] == 'CloseWindowGame':
+            if arr_RC12 and arr_RC12[1] == 'CloseWindowGame':
+                self.RunningRecv = False
                 self.OpenWinScreen()
             elif arr_RC12[1] == 'This_Round':
                 self.roundLBL2.set(str(arr_RC12[0]) + " / 10")
