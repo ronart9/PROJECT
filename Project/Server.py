@@ -22,6 +22,7 @@ class Server(object):
         self.userDb = UserDB()
         self.gameDb = GameDB()
         self.players = []
+        self.lobbies = []
         self.format = 'utf-8'
         key_pair = RSA.generate(2048)
         self.public_key = key_pair.publickey().export_key()
@@ -202,6 +203,31 @@ class Server(object):
             self.send_data(str_data1, socket2)
 
 
+    # def Create_Lobby(self, client_socket, arr):
+    #     print("lobby...")
+    #     player = Player(client_socket, arr[1])
+    #     lobby_exists = next((lobby for lobby in self.lobbies if len(lobby) == 1), None)
+    #     if lobby_exists:
+    #         lobby_exists.appand(player)
+    #         print("two players in the lobby")
+    #         player1, player2 = lobby_exists
+    #         socket1 = player1.client_socket
+    #         socket2 = player2.client_socket
+    #         data1 = [player1.name, "start"]
+    #         data2 = [player2.name, "start"]
+    #         str_data1 = ",".join(data1)
+    #         str_data2 = ",".join(data2)
+    #         self.send_data(str_data2, socket1)
+    #         self.send_data(str_data1, socket2)
+    #     else:
+    #         new_lobby = [player]
+    #         self.lobbies.append(new_lobby)
+    #         print("one is in the lobby")
+    #         data = [arr[1], "wait"]
+    #         join_data = ",".join(data)
+    #         self.send_data(join_data, client_socket)
+
+
     def leaveLobby(self, client_socket, arr):
         while True:
             print(arr[1])
@@ -356,6 +382,6 @@ class Server(object):
 
 if __name__ == '__main__':
     ip = '127.0.0.1'
-    port = 1802
+    port = 1827
     s = Server(ip, port)
     s.start()
