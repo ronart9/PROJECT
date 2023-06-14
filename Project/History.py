@@ -32,6 +32,10 @@ class History(tkinter.Toplevel):
         self.table.heading("Player2", text="Player 2")
         self.table.heading("Winner", text="Winner")
         self.table.place(x=130, y=120)
+        # ----------------------------------------------------------------------------------------------
+        self.lab_history = Label(self, text='- Game History -', font=('Helvetica bold', 20), fg='black', bg='#6ea7db')
+        self.lab_history.place(x=215, y=70)
+        # ----------------------------------------------------------------------------------------------
         self.History_Menu()
 
 
@@ -50,6 +54,14 @@ class History(tkinter.Toplevel):
                 player2 = line[2]
                 winner = line[3]
                 self.table.insert("", "end", values=(game_id, player1, player2, winner), tags=("data",))
+        except ConnectionResetError as e:
+            # Server disconnected
+            print("Connection reset error:", str(e))
+            # Perform any necessary cleanup or reset the application state
+            print("error conn server-client - history")
+            self.parent.client_socket.close()
+            # You can provide an option for the user to reconnect or exit the application
+            self.parent.destroy()
         except:
             print("fail - history tbl")
 

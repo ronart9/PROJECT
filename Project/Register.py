@@ -93,6 +93,14 @@ class Register(tkinter.Toplevel):
             else:
                 print("username is incorrect")
                 messagebox.showerror("error", "error in username")
+        except ConnectionResetError as e:
+            # Server disconnected
+            print("Connection reset error:", str(e))
+            # Perform any necessary cleanup or reset the application state
+            print("error conn server-client - register")
+            self.parent.client_socket.close()
+            # You can provide an option for the user to reconnect or exit the application
+            self.parent.destroy()
         except:
             print("could not register")
 

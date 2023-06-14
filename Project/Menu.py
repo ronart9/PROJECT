@@ -107,6 +107,12 @@ class Menu_Screen(tkinter.Tk):
         self.lbl_logoLogin = Label(self, image=self.paintLogin, bg='#856ff8')
         self.lbl_logoLogin.place(x=120, y=20)
         # ----------------------------------------------------------------------------------------------
+        self.logoCrown = "crown.png"
+        self.logocrownimg = Image.open(self.logoCrown)
+        self.resizeblecrown = self.logocrownimg.resize((130, 130), Image.Resampling.LANCZOS)
+        self.paintcrown = ImageTk.PhotoImage(self.resizeblecrown)
+        self.lbl_logoCrown = Label(self, image=self.paintcrown, bg='#856ff8')
+        # ----------------------------------------------------------------------------------------------
         self.plz = StringVar()
         self.plz.set("Please Login...")
         self.lab_plz_login = Label(self, textvariable=self.plz, bg='#856ff8' ,font=('Helvetica bold', 16))
@@ -139,10 +145,18 @@ class Menu_Screen(tkinter.Tk):
             self.dataPuKey = self.recv_data(self.client_socket)
             print("data " + self.dataPuKey)
             print("hi", self.client_socket)
+        except ConnectionRefusedError:
+            # Server connection failed
+            messagebox.showerror("Connection Error", "Failed to connect to the server.")
+            self.destroy()
         except:
-            print("there is no server connaction")
+            print("something went wrong")
             self.count_down()
-            self.close()
+            self.client_socket.close()
+            print("socket has successfully closed")
+
+
+
 
     def log_in(self):
         try:
@@ -175,10 +189,11 @@ class Menu_Screen(tkinter.Tk):
                 self.ent_email.config(state= "disabled")
                 self.ent_password.config(state="disabled")
                 self.winsLBL = StringVar()
-                self.lab_wins = Label(self, textvariable=self.winsLBL, fg='#000000', bg='#856ff8',
-                                      font=('Helvetica bold', 20))
-                self.lab_wins.place(x=776, y=420)
+                self.lab_wins = Label(self, textvariable=self.winsLBL, fg='#000000', bg='#f4d22b',
+                                      font=('Helvetica bold', 15))
+                self.lab_wins.place(x=778, y=420)
                 self.btn_ref.place(x=750, y=500)
+                self.lbl_logoCrown.place(x=724, y=360)
                 self.arr_wins = ["wins", self.username]
                 self.arrW = ",".join(self.arr_wins)
                 self.send_data(self.arrW, self.client_socket)
@@ -186,7 +201,6 @@ class Menu_Screen(tkinter.Tk):
                 arr_wins = data_wins.split(",")
                 print(arr_wins)
                 if arr_wins[1] == 'GotWins':
-                    print("6")
                     self.winsLBL.set(str(arr_wins[0]))
                 #self.handle_thread_wins()
             elif d[0] == 'F':
@@ -194,6 +208,20 @@ class Menu_Screen(tkinter.Tk):
                 self.Jlobby.place_forget()
                 messagebox.showerror("error message", "Error")
                 print(data)
+        except ConnectionRefusedError:
+            # Server connection failed
+            messagebox.showerror("Connection Error", "Failed to connect to the server.")
+            self.destroy()
+        except ConnectionResetError as e:
+            # Server disconnected
+            print("Connection reset error:", str(e))
+            # Perform any necessary cleanup or reset the application state
+            print("error conn server-client - menu")
+            self.client_socket.close()
+            # You can provide an option for the user to reconnect or exit the application
+            self.destroy()
+
+
         except:
             print("error in log in")
             return False
@@ -215,7 +243,7 @@ class Menu_Screen(tkinter.Tk):
             print("error opening history screen")
 
     def count_down(self):
-        for i in range(5, 0, -1):
+        for i in range(3, 0, -1):
             print(i)
             time.sleep(1)
 
@@ -235,6 +263,7 @@ class Menu_Screen(tkinter.Tk):
             self.ent_email.config(state="normal")
             self.btn_ref.place_forget()
             self.lab_wins.place_forget()
+            self.lbl_logoCrown.place_forget()
             self.ent_password.config(state="normal")
             self.clear_text()
         except:
@@ -264,6 +293,7 @@ class Menu_Screen(tkinter.Tk):
             window = Lobby(self)
             window.grab_set()
             self.withdraw()
+
         except:
             print("error opening Lobby")
 
@@ -280,6 +310,14 @@ class Menu_Screen(tkinter.Tk):
             print(arr_wins)
             if arr_wins[1] == 'GotWins':
                 self.winsLBL.set(str(arr_wins[0]))
+        except ConnectionResetError as e:
+            # Server disconnected
+            print("Connection reset error:", str(e))
+            # Perform any necessary cleanup or reset the application state
+            print("error conn server-client - menu")
+            self.client_socket.close()
+            # You can provide an option for the user to reconnect or exit the application
+            self.destroy()
         except:
             print("error in refreshing")
             return False

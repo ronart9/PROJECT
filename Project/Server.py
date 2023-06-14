@@ -104,7 +104,7 @@ class Server(object):
 
 
                 elif arr and arr[0] == "JoinLobby" and len(arr) == 2:
-                    print("Lobby...")
+                    print("player is joining")
                     self.Create_Lobby(client_socket, arr)
 
                 elif arr and arr[0] == "wins" and len(arr) == 2:
@@ -117,34 +117,40 @@ class Server(object):
                     self.leaveLobby(client_socket, arr)
 
                 elif arr and arr[0] == "UserNameP2" and len(arr) == 2:
-                    if (arr[1] == self.players[0].name):
+                    lobby = next((lobby for lobby in self.lobbies if arr[1] in [player.name for player in lobby]), None)
+                    player1, player2 = lobby
+                    if (arr[1] == player1.name):
                         self.SendPlayerName1(client_socket, arr)
-                    elif (arr[1] == self.players[1].name):
+                    elif (arr[1] == player2.name):
                         self.SendPlayerName2(client_socket, arr)
 
                 elif arr and arr[0] == "Rounds" and len(arr) == 3:
-                    if(arr[1] == self.players[0].name and arr[2] != "11"):
+                    lobby = next((lobby for lobby in self.lobbies if arr[1] in [player.name for player in lobby]), None)
+                    player1, player2 = lobby
+                    if(arr[1] == player1.name and arr[2] != "11"):
                         self.Count_Rounds1(client_socket, arr)
-                    elif (arr[1] == self.players[1].name and arr[2] != "11"):
+                    elif (arr[1] == player2.name and arr[2] != "11"):
                         self.Count_Rounds2(client_socket, arr)
 
 
 
                 elif arr and arr[0] == "WinScreen" and len(arr) == 2:
-                    if (arr[1] == self.players[0].name):
+                    lobby = next((lobby for lobby in self.lobbies if arr[1] in [player.name for player in lobby]), None)
+                    player1, player2 = lobby
+                    if (arr[1] == player1.name):
                         self.Win_Screen1(client_socket, arr)
                         self.Win_Screen2(client_socket, arr)
-                        self.winner = self.players[0].name
-                        self.loser = self.players[1].name
-                        self.userDb.update_wins(self.players[0].name)
-                        self.gameDb.insert_game(self.players[0].name, self.players[1].name, self.players[0].name)
-                    elif (arr[1] == self.players[1].name):
+                        self.winner = player1.name
+                        self.loser = player2.name
+                        self.userDb.update_wins(player1.name)
+                        self.gameDb.insert_game(player1.name, player2.name, player1.name)
+                    elif (arr[1] == player2.name):
                         self.Win_Screen1(client_socket, arr)
                         self.Win_Screen2(client_socket, arr)
-                        self.winner = self.players[1].name
-                        self.loser = self.players[0].name
-                        self.userDb.update_wins(self.players[1].name)
-                        self.gameDb.insert_game(self.players[0].name, self.players[1].name, self.players[1].name)
+                        self.winner = player2.name
+                        self.loser = player1.name
+                        self.userDb.update_wins(player2.name)
+                        self.gameDb.insert_game(player1.name, player2.name, player2.name)
                     print(self.winner)
                     print(self.loser)
 
@@ -155,16 +161,36 @@ class Server(object):
                     self.send_data(str_winner_loser, client_socket)
 
                 elif arr and arr[0] == "LeaveWinScreen" and len(arr)== 2:
-                    if arr[1] == self.players[0].name:
-                        self.players.remove(self.players[0])
-                        print("W----W")
-                        print(self.players)
-
-                    elif arr[1] == self.players[1].name:
-                        self.players.remove(self.players[1])
-                        print("M----M")
-                        print(self.players)
-
+                    print("W lobby W")
+                    lobby = next((lobby for lobby in self.lobbies if arr[1] in [player.name for player in lobby]), None)
+                    #player1, player2 = lobby
+                    if lobby:
+                        print("lobby remove")
+                        self.lobbies.remove(lobby)
+                    else:
+                        print("could not find a lobby to remove")
+                    # if arr[1] == player1.name:
+                    #     lobby.remove(player1) #[[]]
+                    #     print("W----W")
+                    #     #print(self.players)
+                    #
+                    # elif arr[1] == player2.name:
+                    #     lobby.remove(player2)
+                    #     print("M----M")
+                    #     #print(self.players)
+                elif arr and arr[0] == "exitOnGame" and len(arr) == 2:
+                    lobby = next((lobby for lobby in self.lobbies if arr[1] in [player.name for player in lobby]), None)
+                    player1, player2 = lobby
+                    if lobby and arr[1] == player1.name:
+                        self.SendPlayerDis1(client_socket, arr)
+                        print("lobby remove - p1")
+                        self.lobbies.remove(lobby)
+                    elif lobby and arr[1] == player2.name:
+                        self.SendPlayerDis2(client_socket, arr)
+                        print("lobby remove - p2")
+                        self.lobbies.remove(lobby)
+                    else:
+                        print("could not find a lobby to remove")
 
 
                 elif arr != None and arr[0] == "get_all_users" and len(arr) == 1:
@@ -175,57 +201,60 @@ class Server(object):
                     server_data = "Failed"
                     client_socket.send(server_data.encode())
             except:
-                print("error")
+                print("error - server main")
                 not_crash = False
                 break
 
 
-    def Create_Lobby(self, client_socket, arr):
-        player = Player(client_socket, arr[1])
-        self.players.append(player)
-        if(len(self.players) == 1):
-            data = [arr[1], "wait"]
-            join_data = ",".join(data)
-            #client_socket.send(join_data.encode())
-            self.send_data(join_data, client_socket)
-        elif(len(self.players) == 2):
-            player1 = self.players[0]
-            player2 = self.players[1]
-            socket1 = player1.client_socket
-            socket2 = player2.client_socket
-            data1 = [player1.name, "start"]
-            data2 = [player2.name, "start"]
-            str_data1 = ",".join(data1)
-            str_data2 = ",".join(data2)
-            #socket1.send(str_data2.encode())
-            self.send_data(str_data2, socket1)
-            #socket2.send(str_data1.encode())
-            self.send_data(str_data1, socket2)
-
-
     # def Create_Lobby(self, client_socket, arr):
-    #     print("lobby...")
     #     player = Player(client_socket, arr[1])
-    #     lobby_exists = next((lobby for lobby in self.lobbies if len(lobby) == 1), None)
-    #     if lobby_exists:
-    #         lobby_exists.appand(player)
-    #         print("two players in the lobby")
-    #         player1, player2 = lobby_exists
+    #     self.players.append(player)
+    #     if(len(self.players) == 1):
+    #         data = [arr[1], "wait"]
+    #         join_data = ",".join(data)
+    #         #client_socket.send(join_data.encode())
+    #         self.send_data(join_data, client_socket)
+    #     elif(len(self.players) == 2):
+    #         player1 = self.players[0]
+    #         player2 = self.players[1]
     #         socket1 = player1.client_socket
     #         socket2 = player2.client_socket
     #         data1 = [player1.name, "start"]
     #         data2 = [player2.name, "start"]
     #         str_data1 = ",".join(data1)
     #         str_data2 = ",".join(data2)
+    #         #socket1.send(str_data2.encode())
     #         self.send_data(str_data2, socket1)
+    #         #socket2.send(str_data1.encode())
     #         self.send_data(str_data1, socket2)
-    #     else:
-    #         new_lobby = [player]
-    #         self.lobbies.append(new_lobby)
-    #         print("one is in the lobby")
-    #         data = [arr[1], "wait"]
-    #         join_data = ",".join(data)
-    #         self.send_data(join_data, client_socket)
+
+
+
+    def Create_Lobby(self, client_socket, arr):
+        print(f"lobby...{arr[1]}")
+        player = Player(client_socket, arr[1])
+        lobby_exists = next((lobby for lobby in self.lobbies if len(lobby) == 1), None)
+        print(lobby_exists)
+        if lobby_exists:
+            print("c")
+            lobby_exists.append(player)
+            print("two players in the lobby")
+            player1, player2 = lobby_exists
+            socket1 = player1.client_socket
+            socket2 = player2.client_socket
+            data1 = [player1.name, "start"]
+            data2 = [player2.name, "start"]
+            str_data1 = ",".join(data1)
+            str_data2 = ",".join(data2)
+            self.send_data(str_data2, socket1)
+            self.send_data(str_data1, socket2)
+        else:
+            new_lobby = [player]
+            self.lobbies.append(new_lobby)
+            print("one is in the lobby")
+            data = [arr[1], "wait"]
+            join_data = ",".join(data)
+            self.send_data(join_data, client_socket)
 
 
     def leaveLobby(self, client_socket, arr):
@@ -239,17 +268,21 @@ class Server(object):
                 self.players[0].send("playerleave".encode())
 
     def SendPlayerName1(self, client_socket, arr):
-        player2 = self.players[1]
+        lobby = next((lobby for lobby in self.lobbies if arr[1] in [player.name for player in lobby]), None)
+        player1, player2 = lobby
+        #player2 = self.players[1]
         socket2 = player2.client_socket
-        dataname2 = [str(self.players[0].name), "DataName"]
+        dataname2 = [str(player1.name), "DataName"]
         str_dataname2 = ",".join(dataname2)
         #socket2.send(str_dataname2.encode())
         self.send_data(str_dataname2, socket2)
 
     def SendPlayerName2(self, client_socket, arr):
-        player1 = self.players[0]
+        lobby = next((lobby for lobby in self.lobbies if arr[1] in [player.name for player in lobby]), None)
+        player1, player2 = lobby
+        #player1 = self.players[0]
         socket1 = player1.client_socket
-        dataname1 = [str(self.players[1].name), "DataName"]
+        dataname1 = [str(player2.name), "DataName"]
         str_dataname1 = ",".join(dataname1)
         #socket1.send(str_dataname1.encode())
         self.send_data(str_dataname1, socket1)
@@ -257,24 +290,30 @@ class Server(object):
 
     def Win_Screen1(self, client_socket, arr):
         # "CloseWindowGame"
-        player2 = self.players[1]
+        lobby = next((lobby for lobby in self.lobbies if arr[1] in [player.name for player in lobby]), None)
+        player1, player2 = lobby
+        #player2 = self.players[1]
         socket2 = player2.client_socket
-        dataname2 = [str(self.players[0].name), "CloseWindowGame"]
+        dataname2 = [str(player1.name), "CloseWindowGame"]
         str_dataname2 = ",".join(dataname2)
         #socket2.send(str_dataname2.encode())
         self.send_data(str_dataname2, socket2)
 
     def Win_Screen2(self, client_socket, arr):
-        player1 = self.players[0]
+        lobby = next((lobby for lobby in self.lobbies if arr[1] in [player.name for player in lobby]), None)
+        player1, player2 = lobby
+        #player1 = self.players[0]
         socket1 = player1.client_socket
-        dataname1 = [str(self.players[1].name), "CloseWindowGame"]
+        dataname1 = [str(player2.name), "CloseWindowGame"]
         str_dataname1 = ",".join(dataname1)
         #socket1.send(str_dataname1.encode())
         self.send_data(str_dataname1, socket1)
 
 
     def Count_Rounds1(self, client_socket, arr):
-        player2 = self.players[1]
+        lobby = next((lobby for lobby in self.lobbies if arr[1] in [player.name for player in lobby]), None)
+        player1, player2 = lobby
+        #player2 = self.players[1]
         socket2 = player2.client_socket
         data = [arr[2], "This_Round", arr[1]]
         str_data1 = ",".join(data)
@@ -283,32 +322,34 @@ class Server(object):
 
 
     def Count_Rounds2(self, client_socket, arr):
-        player1 = self.players[0]
+        lobby = next((lobby for lobby in self.lobbies if arr[1] in [player.name for player in lobby]), None)
+        player1, player2 = lobby
+        #player1 = self.players[0]
         socket1 = player1.client_socket
         data = [arr[2], "This_Round", arr[1]]
         str_data1 = ",".join(data)
         #socket1.send(str_data1.encode())
         self.send_data(str_data1, socket1)
 
-    def Win_Loser_P1(self, client_socket, arr):
-        player2 = self.players[1]
+    def SendPlayerDis1(self, client_socket, arr):
+        lobby = next((lobby for lobby in self.lobbies if arr[1] in [player.name for player in lobby]), None)
+        player1, player2 = lobby
+        # player2 = self.players[1]
         socket2 = player2.client_socket
-        arr_winner_loser = [str(self.winner), str(self.loser), "Win_Lose_Players"]
-        str_winner_loser = ",".join(arr_winner_loser)
-        socket2.send(str_winner_loser.encode())
+        dataDis2 = [str(player1.name), "DataDisP2"]
+        str_dataDis2 = ",".join(dataDis2)
+        # socket2.send(str_dataname2.encode())
+        self.send_data(str_dataDis2, socket2)
 
-    def Win_Loser_P2(self, client_socket, arr):
-        player1 = self.players[0]
+    def SendPlayerDis2(self, client_socket, arr):
+        lobby = next((lobby for lobby in self.lobbies if arr[1] in [player.name for player in lobby]), None)
+        player1, player2 = lobby
+        # player1 = self.players[0]
         socket1 = player1.client_socket
-        arr_winner_loser = [str(self.winner), str(self.loser), "Win_Lose_Players"]
-        str_winner_loser = ",".join(arr_winner_loser)
-        socket1.send(str_winner_loser.encode())
-
-
-        #arr_winner_loser = [str(self.winner), str(self.loser), "Win_Lose_Players"]
-        #str_winner_loser = ",".join(arr_winner_loser)
-        #socket1.send(str_winner_loser.encode())
-        #socket2.send(str_winner_loser.encode())
+        dataDis1 = [str(player2.name), "DataDisP2"]
+        str_dataDis1 = ",".join(dataDis1)
+        # socket1.send(str_dataname1.encode())
+        self.send_data(str_dataDis1, socket1)
 
     def send_data(self, data, client_socket, Stype= "default"):
         try:

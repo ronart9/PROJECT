@@ -24,6 +24,8 @@ class Lobby(tkinter.Toplevel):
         self.resizable(width=False, height=False)
         self.title('Waiting Lobby')
         self.userDb = UserDB()
+        self.lobbies = {}
+        self.protocol("WM_DELETE_WINDOW", self.on_closing)
         self.create_gui()
 
         #self.waiting_list = ["me"]
@@ -33,7 +35,7 @@ class Lobby(tkinter.Toplevel):
     def create_gui(self):
         self.configure(bg='#909090')  # -using color HEX
         # ----------------------------------------------------------------------------------------------
-        self.btn_close = Button(self, text='Leave', command=self.close, font=('Helvetica bold', 12),
+        self.btn_close = Button(self, text='Leave', command=self.on_closing, font=('Helvetica bold', 12),
                                 background="#ea1111")
         self.btn_close.place(x=420, y=20)
         # ----------------------------------------------------------------------------------------------
@@ -103,31 +105,47 @@ class Lobby(tkinter.Toplevel):
         self.Client_handler.start()
 
     def waiting_for_player(self):
-
-        #email = self.parent.ent_email.get()
-        #password = self.parent.ent_password.get()
-        username = self.parent.username
-        arr = ["JoinLobby", username]
-        data = ",".join(arr)
-        #self.parent.client_socket.send(data.encode())
-        self.parent.send_data(data, self.parent.client_socket)
-        #data = self.parent.client_socket.recv(1024).decode()
-        data1 = self.parent.recv_data(self.parent.client_socket)
-        arr1 = data1.split(",")
-        print(arr1)
-        self.num = 2
-        if(arr1[1] == "wait"):
+        try:
+            #email = self.parent.ent_email.get()
+            #password = self.parent.ent_password.get()
+            username = self.parent.username
+            arr = ["JoinLobby", username]
+            data = ",".join(arr)
+            #self.parent.client_socket.send(data.encode())
+            self.parent.send_data(data, self.parent.client_socket)
             #data = self.parent.client_socket.recv(1024).decode()
-            data2 = self.parent.recv_data(self.parent.client_socket)
-            data3 = data2.split(",")
-            #self.num1set = 2
-            self.list.insert(2, data3[0]+ f" [player {self.num}]")
-            self.Animation_Ent_Lobby()
-        elif(arr1[1] == "start"):
-            print(arr1[0], " join us ")
-            #self.num2set= 1
-            self.list.insert(2, arr1[0]+ f" [player {self.num}]")
-            self.Animation_Ent_Lobby()
+            data1 = self.parent.recv_data(self.parent.client_socket)
+            arr1 = data1.split(",")
+            print(arr1)
+            self.num = 2
+            if(arr1[1] == "wait"):
+                #data = self.parent.client_socket.recv(1024).decode()
+                data2 = self.parent.recv_data(self.parent.client_socket)
+                data3 = data2.split(",")
+                #self.num1set = 2
+                self.list.insert(2, data3[0]+ f" [player {self.num}]")
+                self.Animation_Ent_Lobby()
+            elif(arr1[1] == "start"):
+                print(arr1[0], " join us ")
+                #self.num2set= 1
+                self.list.insert(2, arr1[0]+ f" [player {self.num}]")
+                self.Animation_Ent_Lobby()
+        except ConnectionRefusedError:
+             # Server connection failed
+             messagebox.showerror("Connection Error", "Failed to connect to the server.")
+             self.destroy()
+        except ConnectionResetError as e:
+            # Server disconnected
+            print("Connection reset error:", str(e))
+            # Perform any necessary cleanup or reset the application state
+            print("error conn server-client - menu")
+            self.parent.client_socket.close()
+            # You can provide an option for the user to reconnect or exit the application
+            self.parent.destroy()
+        except:
+            print("error in lobby menu")
+
+
 
 
     def play_minigame(self):
@@ -215,12 +233,11 @@ class Lobby(tkinter.Toplevel):
         index = self.list.get(0, END).index(player)
         self.list.delete(index)
 
-    def close(self):
-        #self.list.delete(0, END)
-        #self.remove_player(self.parent.username)
-        #message = ["LeaveLobby", self.parent.username]
-        #data = ",".join(message)
-        #self.parent.client_socket.send(data.encode())
-        #message = self.parent.client_socket.recv(1024).decode()
+    def on_closing(self):
+        print("yes it is here")
+        self.Arr = ["exitOnGame", self.username]
+        self.ArrData = ",".join(self.Arr)
+        self.parent.send_data(self.ArrData, self.parent.client_socket)
+        print("again here")
         self.parent.deiconify() #show parent
         self.destroy()# close and destroy this screen

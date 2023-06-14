@@ -91,18 +91,21 @@ class Winner(tkinter.Toplevel):
             self.WinnerLBL.set(str(self.arr_WL[0]))
             self.LoserLBL.set(str(self.arr_WL[1]))
 
-
         except:
-            print("error")
+            print("error in winner screen")
 
 
     def close(self):
-        self.god.flag = False
-        message = ["LeaveWinScreen", self.username]
-        data = ",".join(message)
-        #self.parent.parent.parent.client_socket.send(data.encode())
-        self.god.send_data(data, self.god.client_socket)
-        self.parent.parent.parent.deiconify() #show parent
-        self.destroy()# close and destroy this screen
+        try:
+            self.god.flag = False
+            message = ["LeaveWinScreen", self.username]
+            data = ",".join(message)
+            #self.parent.parent.parent.client_socket.send(data.encode())
+            self.god.send_data(data, self.god.client_socket)
+            self.parent.parent.parent.deiconify() #show parent
+            self.destroy()# close and destroy this screen
+        except:
+            print("error in closing winner screen")
+
 
 

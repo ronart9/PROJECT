@@ -28,6 +28,7 @@ class Game(tkinter.Toplevel):
         self.RunningGame = True
         self.RunningRecv = True
         self.god = parent.parent
+        self.protocol("WM_DELETE_WINDOW", self.on_closing)
 
         self.arrImg = [["tree", "../Project/images/tree.png"],
                        ["ghost", "../Project/images/ghost.png"] ,
@@ -142,19 +143,43 @@ class Game(tkinter.Toplevel):
         self.client_round.start()
 
     def recv_rounds(self):
-        while self.RunningRecv:
-            if self.flag:
-                return
-            #data_RC12 = self.parent.parent.client_socket.recv(1024).decode()
-            data_RC12 = self.god.recv_data(self.god.client_socket)
-            arr_RC12 = data_RC12.split(",")
-            print(arr_RC12)
-            if arr_RC12 and arr_RC12[1] == 'CloseWindowGame':
-                self.RunningRecv = False
-                self.OpenWinScreen()
-            elif arr_RC12[1] == 'This_Round':
-                self.roundLBL2.set(str(arr_RC12[0]) + " / 10")
-
+        try:
+            while self.RunningRecv:
+                if self.flag:
+                    return
+                #data_RC12 = self.parent.parent.client_socket.recv(1024).decode()
+                data_RC12 = self.god.recv_data(self.god.client_socket)
+                arr_RC12 = data_RC12.split(",")
+                print(arr_RC12)
+                if arr_RC12 and arr_RC12[1] == 'CloseWindowGame':
+                    self.RunningRecv = False
+                    self.OpenWinScreen()
+                elif arr_RC12 and arr_RC12[1] == "DataDisP2":
+                    print("recv here")
+                    self.LabelExit = Label(self, text=f"{self.nameP2} has disconnected.", fg="red", bg='#ffb838', font=('Helvetica bold', 16))
+                    self.LabelExit.place(x=415, y=550)
+                    time.sleep(5)
+                    self.god.destroy()
+                elif arr_RC12[1] == 'This_Round':
+                    self.roundLBL2.set(str(arr_RC12[0]) + " / 10")
+        except ConnectionRefusedError:
+            # Server connection failed
+            messagebox.showerror("Connection Error", "Failed to connect to the server.")
+            self.destroy()
+        except ConnectionResetError as e:
+            # Server connection forcibly closed
+            print("GG-Connection reset error:", str(e))
+            # Perform any necessary cleanup or reset the application state
+            print("error conn server-client - recvGame")
+            self.error_label = Label(self, text="The server has disconnected.", fg="red", bg='#ffb838', font=('Helvetica bold', 16))
+            self.error_label.place(x=405, y=550)
+            self.btn_guess.configure(state= "disabled")
+            time.sleep(5)
+            self.god.client_socket.close()
+            # You can provide an option for the user to reconnect or exit the application
+            self.god.destroy()
+        except:
+            print("something went wrong in recv data")
 
     def recv_WinSc(self):
         while True:
@@ -165,6 +190,12 @@ class Game(tkinter.Toplevel):
             print("recvWinSC")
             if arr_WS[1] == "CloseWindowGame":
                 self.OpenWinScreen()
+
+    def on_closing(self):
+        self.Arr = ["exitOnGame", self.username]
+        self.ArrData = ",".join(self.Arr)
+        self.god.send_data(self.ArrData, self.god.client_socket)
+        self.god.destroy()
 
 
     def GameF(self):
@@ -232,14 +263,22 @@ class Game(tkinter.Toplevel):
                 #for n in range(len(self.arr2)):
                     #self.arrImg.append(self.arr2[n])
                     #self.arr2.remove(self.arr2[n])
-
-
-
+        except ConnectionRefusedError:
+            # Server connection failed
+            messagebox.showerror("Connection Error", "Failed to connect to the server.")
+            self.destroy()
+        except ConnectionResetError as e:
+            # Server connection forcibly closed
+            print("G-Connection reset error:", str(e))
+            self.god.client_socket.close()
+            # Perform any necessary cleanup or reset the application state
+            # You can provide an option for the user to reconnect or exit the application
+            self.god.destroy()
         except:
             print("error - GameF")
 
 
-    def OpenWinScreen(self): #10
+    def OpenWinScreen(self):
         window = Winner(self)
         window.grab_set()
         self.withdraw()
