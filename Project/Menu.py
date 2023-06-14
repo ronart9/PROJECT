@@ -141,10 +141,11 @@ class Menu_Screen(tkinter.Tk):
     def create_socket(self):
         try:
             self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            self.client_socket.connect(('127.0.0.1', 1827))
-            self.dataPuKey = self.recv_data(self.client_socket)
+            self.client_socket.connect(('127.0.0.1', 1827)) #1a. first shake: SYN
+            self.dataPuKey = self.recv_data(self.client_socket) #2b. second shake: SYN ACK
             print("data " + self.dataPuKey)
             print("hi", self.client_socket)
+            self.send_data("Hello this is CLIENT!", self.client_socket) #3a. third shake: ACK
         except ConnectionRefusedError:
             # Server connection failed
             messagebox.showerror("Connection Error", "Failed to connect to the server.")

@@ -41,12 +41,15 @@ class Server(object):
 
             while True:
                 print('waiting for a new client')
-                clientSocket, client_addresses = self.sock.accept()
+                clientSocket, client_addresses = self.sock.accept() #1b. first shake: SYN
                 print('new client entered')
                 #clientSocket.send(self.public_key.encode())
-                self.send_data(self.public_key, clientSocket)
+                self.send_data(self.public_key, clientSocket) #2a. second shake: SYN ACK
+                self.recvingConn = self.recv_data(clientSocket) #3b. third shake: ACK
+                print(str(self.recvingConn))
                 self.count += 1
                 print(self.count)
+
                 # implement here your main logic
                 client_handler = threading.Thread(target=self.handle_client_connection, args=(clientSocket,))
                 client_handler.start()
